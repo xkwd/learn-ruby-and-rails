@@ -1,3 +1,10 @@
+## Table of contents
+
+- [Patterns](#patterns)
+  - [Service Object](#service-object)
+
+## Patterns
+
 ### Service Object
 
 #### 1. Overview
