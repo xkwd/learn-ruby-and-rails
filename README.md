@@ -1,3 +1,5 @@
+![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/cover.png)
+
 ## Table of contents
 
 - [Patterns](#patterns)
