@@ -4,6 +4,8 @@
 
 - [Patterns](#patterns)
   - [Service Object](#service-object)
+- [Development Tools](#development-tools)
+  - [Mastering GIT](#mastering-git)
 
 ## Patterns
 
@@ -147,3 +149,74 @@ def self.call(params)
   new(params).call
 end
 ```
+
+
+
+## Development Tools
+
+### Mastering GIT
+
+#### 1. Use GIT aliases
+
+Type less. Use aliases.
+
+Instead of typing an entire command with multiple options you can define an alias for it. With git you can create aliases directly in your `~/.gitconfig` file under the `$HOME` directory or you can add them to `~/.zshrc` or `~/.bash_profile` files depending on your shell of choice.
+
+Aliases are very personal thing and different people prefer different aliases. Below are some examples:
+
+```shell
+alias gs='git status'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias ga='git add'
+alias go='git checkout'
+alias gb='git branch'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias grsoft='git reset --soft HEAD^'
+alias gl='git log --pretty=oneline'
+alias gl5='git log --pretty=format:"%h - %s" -5'
+alias gpf='git push --force-with-lease'
+```
+
+At some point you may forget what a certain alias actually does, and instead of checking the file with all of them you can use `type` command:
+
+```shell
+$ type gs
+gs is an alias for git status
+```
+
+#### 2. Push force carefully
+
+Use `git push --force-with-lease` instead of `git push --force`
+
+A force push overwrites a remote branch with your local branch, regardless of the status of that remote branch. It is not safe and you might overwrite other developers commits. Force with lease gives you the flexibility to override new commits on your remote branch, whilst protecting your old commit history
+read more how it works [here](http://weiqingtoh.github.io/force-with-lease/).
+
+It is a long command to type, so create an alias for it ;)
+
+
+#### 3. Stick to the general work flow
+
+Begin from an updated master branch:
+
+```bash
+$ git checkout master
+$ git pull origin master
+```
+
+Create a new branch for your feature:
+
+```bash
+$ git checkout -b new_feature_branch
+```
+
+When your feature is ready, push your feature branch to github. Go to the `Pull Requests` tab and create a New Pull Request (PR) selecting your branch as a `compare:` and `master` as a `base`.
+
+```bash
+$ git push origin new_feature_branch
+```
+
+Let somebody make a review of your PR and merge it to the `master` branch after approval.
+
+In case you need to make some changes in a created PR, just add new commits to your branch and push to see them in that PR.
