@@ -15,7 +15,7 @@
 
 If a Rails app is built by following the Rails Way, it is very likely to end up with fat models and bloated controllers, which in turn are difficult both to test and to be understood by new developers. This is a usual scenario when an app gets bigger than a typical CRUD app. Adding a layer of Service Objects (or simply services) is a way to deal with it.
 
-Service Object is a Plain Old Ruby Object (PORO) and is a pattern allowing to extract business logic from Models and Controllers (in Model-View-Controller pattern) to keep them slim and thus readable. A single Service Object encapsulates a single process of the business logic. Therefore, it becomes easier to write, test and modify that specific business logic.
+Service Object is a Plain Old Ruby Object (PORO - a simple object without complicated logic, usually not inheriting from anything) and is a pattern allowing to extract business logic from Models and Controllers (in Model-View-Controller pattern) to keep them slim and thus readable. A single Service Object encapsulates a single process of the business logic. Therefore, it becomes easier to write, test and modify that specific business logic.
 
 #### 2. Common scenarios for usage
 
@@ -39,11 +39,11 @@ Anything that can be re-used, should be tested and does not fit within a single 
 
 When working with an existing app there could be already a naming convention for Service Objects to follow. When dealing with a newly created app the following options are available:
 
-- Naming services after **commands**: **Create**Report, **Update**RemotePrice, **Fetch**FinalResults.
+- Naming services after **actions**: **Create**Report, **Update**RemotePrice, **Fetch**FinalResults.
 - Using '**or**', '**er**' endings for the last noun in a service name: ReportCreat**or**, RemotePriceUpdat**er**, FinalResultsFetch**er**.
 - Appending '**Service**' word to a name based on logic description of a service: ReportCreation**Service**, RemotePriceUpdating**Service**, FinalResultsFetching**Service**.
 
-Service Object always has to have a single public method. Naming options for it are:
+A Service Object has to have a single public method. Naming options for it are:
 
 - `call`
 - `perform`
@@ -54,7 +54,7 @@ Sticking with the convention simplifies understanding of class responsibility ac
 
 #### 5. Directory
 
-Suggested directory for services is **app/services**.
+Services as Domain Objects should go in a corresponding Domain folder - **app/services**.
 
 When you end up with a lot of services within **app/services** Ruby modules could be used for grouping:
 
