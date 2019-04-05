@@ -6,6 +6,7 @@
   - [Service Object](#service-object)
 - [Development Tools](#development-tools)
   - [Mastering GIT](#mastering-git)
+  - [Continuous Integration](#continuous-integration)
 
 ## Patterns
 
@@ -220,3 +221,28 @@ $ git push origin new_feature_branch
 Let somebody make a review of your PR and merge it to the `master` branch after approval.
 
 In case you need to make some changes in a created PR, just add new commits to your branch and push to see them in that PR.
+
+### Continuous Integration
+
+#### 1. Overview
+
+**Continuous integration** (**CI**) is the practice of doing multiple merges per day and having an automated verification system to check those merges for issues. The rationale behind this practice is that checking multiple smaller merges is quicker and the corresponding cost, when used with an automated verification system, is small enough to justify avoidance of bigger merges.
+
+#### 2. Rationale for using an automated verification system
+
+- Allows finding bugs immediately upon their introduction.
+- Helps to merge more often by avoiding bigger merges.
+- Avoids reliance on human verification, which is not as trustworthy as relying on a machine in charge of running tests. Every single change of code now is always triggering a verification system.
+- When dealing with bigger projects, it might be extremely time consuming to run all tests locally on each code iteration.
+- Remote build machine usually has an environment closer to production in comparison to a local machine, which helps to avoid situations when tests are passing only locally.
+
+#### 3. Popular CI tools (**FREE** for open source projects):
+
+- [CircleCI](https://circleci.com/)
+
+[CircleCI 2.0 for a Rails app](https://circleci.com/docs/2.0/language-ruby/) [article] - this guide provides the sample configuration of `.circleci/config.yml` file with the detailed walkthrough for the Rails demo project maintained by CircleCI.
+
+[CircleCI 2.0 configuration reference](https://circleci.com/docs/2.0/configuration-reference/) [article] - the reference for configuration keys used in the `.circleci/config.yml` file.
+
+- [Travis](https://travis-ci.org/)
+- [Jenkins](https://jenkins.io/)
