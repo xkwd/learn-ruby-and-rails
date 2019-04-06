@@ -246,3 +246,85 @@ In case you need to make some changes in a created PR, just add new commits to y
 
 - [Travis](https://travis-ci.org/)
 - [Jenkins](https://jenkins.io/)
+
+
+### Testing with RSpec
+
+#### 1. Overview
+
+Unit tests (or specs) are used for testing of a single component (class or module). Only public methods (representing a public interface) of a single component, not private ones, are to be tested.
+
+When dealing only with a class under a test is not enough and interaction between multiple components is required, integration tests are used. In Rails, for example, even accessing database already implies accessing another component, leading to an integration test.
+
+Both unit and integration tests should cover happy path (e.g. with valid arguments), unhappy path (e.g. with invalid arguments) and edge cases (e.g. division by zero).
+
+#### 2. RSpec vocabulary
+
+`describe` followed by a class name under testing begins a test file.
+
+```ruby
+describe ClassName do
+  # ...
+end
+```
+
+`describe` is also used to group tests e.g. for a specific method. When `describe`'ing a method, the convention is to name an instance method like `#instance_method_name` and class method - `.class_method_name`.
+
+```ruby
+describe ClassName do
+  describe ".class_method_name" do
+    # ...
+  end
+
+  describe "#instance_method_name" do
+    # ...
+  end
+end
+```
+
+`context` is an alias for `describe` and defines a test context and is used to group tests. Proper naming of contexts is important to make test results easier to read. Word `with`, `when`, `if` are good candidates for the first word in a `context` name. Great if contexts are paired, such as "with valid params" followed by "with invalid params".
+
+```ruby
+# ...
+  context "with valid arguments" do
+    # ...
+  end
+
+  context "with invalid arguments" do
+    # ...
+  end
+```
+
+Variables are usually defined after `describe` or after `context`. `let` defines a variable which is only built/created when a name of that variable is used in a test (lazy execution) and is not built/created when it is not used. `let!` ensures a variable is created even if it is not used anywhere in a test (eager execution). Lazy execution of `let` allows to use a not yet defined variable within a code block `{ }` (when for example defining other attributes `let(:home) { FactoryBot.create(:house, owner: not_yet_defined) }`) and to define them with different values within multiple contexts `let(:not_yet_defined) { "reader" }`. `subject` is a special variable containing by default an instance of a class under testing.
+
+```ruby
+describe ClasName do
+  let(:item) { FactoryBot.create(Item, location: location) }
+  let!(:item_persisted) { FactoryBot.create(Item) }
+  # At this point item_persisted variable is already created in the test databased, while item is not
+
+  # For a Service Object a typical subject could be { ServiceName.new(params).call }
+  subject { }
+
+  describe "..." do
+    context "with valid arguments" do
+      # Here a valid location variable is defined for the lazily executed item from the above
+      let(:location) { "Berlin" }
+
+      # ...
+    end
+
+    context "with invalid arguments" do
+      # This time an invalid value (nil) is used for for the same lazily executed item
+      let(:location) { nil }
+
+      # ...
+    end
+  end
+```
+
+`before` is available for execution of some code before all tests or each test, for example preparing something within a specific context.
+
+`it` followed by a description of what is being tested (e.g. `it "successfully generates user stats"`) defines a specific test.
+
+Testing within multiple contexts usually leads to duplications. `shared_contexts` are used to group re-used variables usually defined after a `context` name and `shared_examples` - to group re-used tests. `include_context` and `include_examples` are used to include those previously defined re-used components.
