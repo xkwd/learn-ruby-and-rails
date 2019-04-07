@@ -7,6 +7,7 @@
 - [Development Tools](#development-tools)
   - [Mastering GIT](#mastering-git)
   - [Continuous Integration](#continuous-integration)
+- [RSpec basics](#rspec-basics)
 
 ## Patterns
 
@@ -247,14 +248,13 @@ In case you need to make some changes in a created PR, just add new commits to y
 - [Travis](https://travis-ci.org/)
 - [Jenkins](https://jenkins.io/)
 
-
-### Testing with RSpec
+### RSpec basics
 
 #### 1. Overview
 
-Unit tests (or specs) are used for testing of a single component (class or module). Only public methods (representing a public interface) of a single component, not private ones, are to be tested.
+Unit tests (or specs) are used for testing of a single component (class or module). Only public methods should be tested, not private ones. Public methods do represent a public interface of a component.
 
-When dealing only with a class under a test is not enough and interaction between multiple components is required, integration tests are used. In Rails, for example, even accessing database already implies accessing another component, leading to an integration test.
+Besides units tests there are integration tests. They are used when testing goes beyond the logic of a single component. For instance accessing a database already implies accessing another component, leading to an integration test.
 
 Both unit and integration tests should cover happy path (e.g. with valid arguments), unhappy path (e.g. with invalid arguments) and edge cases (e.g. division by zero).
 
@@ -298,7 +298,7 @@ end
 Variables are usually defined after `describe` or after `context`. `let` defines a variable which is only built/created when a name of that variable is used in a test (lazy execution) and is not built/created when it is not used. `let!` ensures a variable is created even if it is not used anywhere in a test (eager execution). Lazy execution of `let` allows to use a not yet defined variable within a code block `{ }` (when for example defining other attributes `let(:home) { FactoryBot.create(:house, owner: not_yet_defined) }`) and to define them with different values within multiple contexts `let(:not_yet_defined) { "reader" }`. `subject` is a special variable containing by default an instance of a class under testing.
 
 ```ruby
-describe ClasName do
+describe ClassName do
   let(:item) { FactoryBot.create(Item, location: location) }
   let!(:item_persisted) { FactoryBot.create(Item) }
   # At this point item_persisted variable is already created in the test databased, while item is not
