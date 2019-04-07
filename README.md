@@ -223,6 +223,35 @@ Let somebody make a review of your PR and merge it to the `master` branch after 
 
 In case you need to make some changes in a created PR, just add new commits to your branch and push to see them in that PR.
 
+#### 4. Useful tips
+
+Use `git add -p` when only a portion of changes in a certain file has to be committed. This might be useful when for example scope of changes in a file is beyond a single commit or when some undesirable local changes have suddenly appeared and require extra time for fixing.
+
+The output will be:
+
+```
+Stage this hunk [y,n,q,a,d,/,e,?]?
+```
+
+Which means:
+
+```shell
+y - stage this hunk
+n - do not stage this hunk
+q - quit; do not stage this hunk nor any of the remaining ones
+a - stage this hunk and all later hunks in the file
+d - do not stage this hunk nor any of the later hunks in the file
+g - select a hunk to go to
+/ - search for a hunk matching the given regex
+j - leave this hunk undecided, see next undecided hunk
+J - leave this hunk undecided, see next hunk
+k - leave this hunk undecided, see previous undecided hunk
+K - leave this hunk undecided, see previous hunk
+s - split the current hunk into smaller hunks # Type 's' to split if a suggestion is too big
+e - manually edit the current hunk
+? - print help
+```
+
 ### Continuous Integration
 
 #### 1. Overview
