@@ -4,6 +4,7 @@
 
 - [Patterns](#patterns)
   - [Service Object](#service-object)
+  - [Decorator](#decorator)
 - [Development Tools](#development-tools)
   - [Mastering GIT](#mastering-git)
   - [Continuous Integration](#continuous-integration)
@@ -152,6 +153,87 @@ def self.call(params)
 end
 ```
 
+### Decorator
+
+#### 1. Overview
+
+With the time all those instance methods in a Rails model (e.g. `#full_name`, `#short_description`, `#last_accessed_at`, very often required for presentation purposes) lead to so called 'fat' models. And this is assuming that such logic does not go into views. To avoid 'fat' models, the decorator pattern could be used providing an alternative location for methods which extend functionality of an individual extended/decorated object, without affecting other instances of the same class. In other words, a decorator **wraps** an object with extra methods.
+
+A very important detail of the pattern is that a decorated object should have not only extended methods but also all original methods of its class. This is done by delegating not defined by a decorator methods to a decorated object. Thus, an object always responds to the same interface no matter how many times it is decorated.
+
+Also, assuming that a decorator is only used for presentation logic, it could be called a presenter. Presenter is also a decorator, but solely for presentation logic. Say you have a conditional in a view, then it is rather a case for a presenter, and not a decorator, since a conditional method helps with presentation but does not extend a decorated object.
+
+#### 2. Advantages
+
+- SOLID: a class is extended with a decorator, yet is not modified, which is compliant with Open Closed Principle
+- Models become thinner
+- Reusable
+
+#### 3. Naming conventions
+
+- Appending 'Decorator' to a class name: Article**Decorator**, Invoice**Decorator**
+
+#### 4. Directory
+
+- app/**decorators**
+
+#### 5. Sample decorator
+
+Using `SimpleDelegator`:
+
+```ruby
+class CommentDecorator < SimpleDelegator
+  # SimpleDelegator ensures that all methods of a Comment instance (comment = Comment.find(params[:comment_id]))
+  # passed on initialization (CommentDecorator.new(comment)), are available in an instance of CommentDecorator
+
+  # If you need to preserve a class of a decorated object/component
+  # then there is an option to re-define the class method like below:
+  # def class
+  #   __getobj__.class
+  # end
+
+  def added_at
+    # The delegator has access to the model.created_at attribute because a passed comment has it
+    created_at.strftime('%A, %B %e')
+  end
+
+  def upvotes_count
+    # Same thing for comment.ratings
+    ratings.where(positive: true).count.to_s
+  end
+end
+```
+
+Thanks to `SimpleDelegator` you have access to methods of a passed component (comment in this case) and can for example access an `id` somewhere in a view.
+
+Plain Old Ruby Object - PORO:
+
+```ruby
+class CommentDecorator
+  def initialize(comment)
+    @comment = comment
+  end
+
+  # If PORO is your preference, than this is a way to access component interface:
+  # def method_missing(method, *args)
+  #   comment.send(method, *args)
+  # end
+
+  def added_at
+    comment.created_at.strftime('%A, %B %e')
+  end
+
+  def upvotes_count
+    comment.ratings.where(positive: true).count.to_s
+  end
+
+  private
+
+  attr_reader :comment
+end
+```
+
+This PORO implementation above is not really a decorator, unless method_missing is used to get no access to the interface of a passed component.
 
 
 ## Development Tools
