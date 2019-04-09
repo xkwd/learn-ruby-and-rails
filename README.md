@@ -9,6 +9,7 @@
   - [Mastering GIT](#mastering-git)
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
+  - [Model tests](#3-model-tests)
 
 ## Patterns
 
@@ -439,3 +440,63 @@ describe ClassName do
 `it` followed by a description of what is being tested (e.g. `it "successfully generates user stats"`) defines a specific test.
 
 Testing within multiple contexts usually leads to duplications. `shared_contexts` are used to group re-used variables usually defined after a `context` name and `shared_examples` - to group re-used tests. `include_context` and `include_examples` are used to include those previously defined re-used components.
+
+#### 3. Model tests
+
+[Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers) gem is a must have when testing Rails models. It provides one-liners that would otherwise require more code to test same things.
+
+```ruby
+require 'rails_helper'
+
+# Below is a sample model test
+describe Article, type: :model do
+  describe 'db' do
+    # Verifying whether specified db columns exists
+    describe 'columns' do
+      it { should have_db_column(:title).of_type(:string).with_options(null: false) }
+      it { should have_db_column(:description).of_type(:text) }
+      it { should have_db_column(:user_id).of_type(:bigint) }
+    end
+
+    # Same for indexes
+    describe 'indexes' do
+      it { should have_db_index(:user_id) }
+    end
+  end
+
+  # Making sure relations are set in the model
+  describe 'relations' do
+    it { should belong_to(:user) }
+    it { should have_many(:comments) }
+  end
+
+  # Testing validations
+  describe 'validations' do
+    it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:description) }
+    it { should validate_presence_of(:user) }
+
+    it { should validate_uniqueness_of(:title) }
+  end
+
+  # Testing enums
+  describe 'enumerated attributes' do
+    it { should define_enum_for(:status).with_values([:added, :verified, :published]) }
+  end
+
+  # Model instance methods like the one below better to be located in a decorator or a presenter,
+  # but for the sake of this example this instance method is kept in the model.
+  describe '#short_description' do
+    let(:article) { described_class.new(description: description) }
+    let(:description) do
+      'Such model instance method better to be located in a decorator or a presenter, '\
+      'but for the sake of this example it is kept in the model.'
+    end
+    let(:short_description) { 'Model instance methods b...' }
+
+    it 'returns short description' do
+      expect(article.short_description).to eq(short_description)
+    end
+  end
+end
+```
