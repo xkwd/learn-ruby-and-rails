@@ -10,6 +10,8 @@
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
   - [Model tests](#3-model-tests)
+- [Rails tips](#rails-tips)
+  - [Rails commands](#rails-commands)
 
 ## Patterns
 
@@ -499,4 +501,30 @@ describe Article, type: :model do
     end
   end
 end
+```
+
+## Rails tips
+
+### Rails commands
+
+```ruby
+# App initialization
+rails new app_name -T -d=postgresql # generate an app without Test::Unit, using postgresql
+
+# Generators
+rails g model Article title:string points:integer description:text user:references # generate a new model with provided attributes
+rails g controller ControllerName # generate a controller. ControllerName should be plural
+rails g migration AddSlugToArticles # generate a new migration with a unique timestamp
+
+# Working with migrations
+rails db:rollback STEP=N # rollback N migrations
+rails db:migrate VERSION=20190404124512 # rollback to and including a provided migration version
+rails db:migrate:down VERSION=20190404124512 # rollback just a specific migration without affecting other migrations
+rails db:migrate:status # display status of all migrations, ids and names
+
+# Working with gems
+bundle outdated # list gems that have a newer version available
+
+# Routes
+rails routes | grep Keyword # simplifies search of only specific routes
 ```
