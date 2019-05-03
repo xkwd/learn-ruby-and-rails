@@ -239,6 +239,16 @@ end
 
 This PORO implementation above is not really a decorator, unless method_missing is used to get no access to the interface of a passed component.
 
+Those decorators above are able to work with a single object, though it is not unusual to decorate a collection of objects. The following method could be added to make a decorator work with collections:
+
+```ruby
+def self.decorate_collection(collection)
+  collection.map { |comment| new(comment) }
+end
+```
+
+Which would allow to decorate a collection with `CommentDecorator.decorate_collection(user_comments)`.
+
 
 ## Development Tools
 
