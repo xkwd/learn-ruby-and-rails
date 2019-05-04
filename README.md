@@ -13,6 +13,7 @@
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
+  - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
 
 ## Patterns
 
@@ -553,3 +554,23 @@ gem 'devise', '~> 4.3' # here, with patch digit removed, that pessimistic operat
 ```
 
 Specifying patch-level versions like `~> 4.3.1` in your Gemfile using the pessimistic locking operator `~>` ensures that gem fixes are provided on `bundle update`, but major potentially breaking changes are not introduced. The downside of this is that manual bumping of gem versions is required to stay up to date with updates.
+
+### Rails ActiveRecord model structure
+
+```ruby
+class Model < ApplicationRecord
+  include # ......................include instance methods from a module
+  extend # ......................extend with class methods from a module
+  CONSTANT_NAME = 10 # ........................................constants
+  devise :registerable, :confirmable # ....................devise macros
+  belongs_to; has_many # ...................................associations
+  validates :name, presence: true # .........................validations
+  before_save :method_name # ..................................callbacks
+  accepts_nested_attributes_for :name # ...accepts_nested_attributes_for
+  scope :name, where(color: 'green') # ...........................scopes
+  delegate # ................................................delegations
+  def self.method_name; end # .............................class methods
+  def method_name; end # ........................public instance methods
+  private # .................................everything below is private
+end
+```
