@@ -543,17 +543,41 @@ rails routes | grep Keyword # simplifies search of only specific routes
 
 ### Gem versions in Gemfile
 
-Gem versions and how exactly they are specified results in what you get after running `bundle update`.
+Gem versions and how exactly they are specified in the Gemfile results in what you get after running `bundle update`.
+
+Provide just a gem name to allow any gem version:
 
 ```ruby
-gem 'devise' # allows any version of a gem
-gem 'devise', '4.3.0' # Specifies an exact gem version (4.3.0 - major.minor.patch)
-gem 'devise', '>= 4.3.0', '< 4.5.0' # versions greater than or equal to 4.3.0 yet lower than 4.5.0 are acceptable
-gem 'devise', '~> 4.3.0' # ~> is a pessimistic locking operator (shortcut for >= and <) resulting on gem update to the highest version between >= 4.3.0 and < 4.4
-gem 'devise', '~> 4.3' # here, with patch digit removed, that pessimistic operator ensures updating of a gem within >= 4.3 and < 5.0 range
+gem 'devise'
 ```
 
-Specifying patch-level versions like `~> 4.3.1` in your Gemfile using the pessimistic locking operator `~>` ensures that gem fixes are provided on `bundle update`, but major potentially breaking changes are not introduced. The downside of this is that manual bumping of gem versions is required to stay up to date with updates.
+Ruby gems have three-level versions - major, minor and patch. Specify an exact gem version with:
+
+```ruby
+gem 'devise', '4.3.0' # 4 - major, 3 - minor, 0 - patch
+```
+
+Use comparisons operators when only a certain range of a gem version is required:
+
+```ruby
+gem 'devise', '>= 4.3.0', '< 4.5.0' # means that versions greater than or equal to 4.3.0 yet lower than 4.5.0 are acceptable
+```
+
+The shortest yet the least obvious strategy is using a pessimistic locking operator `~>` which is a shortcut for `>= and <`. How many levels of a provided gem version are used defines behavior of `~>`:
+
+When all three version levels `4.3.0 - major.minor.patch` are provided, gem updates are allowed within a patch version range:
+
+```ruby
+gem 'devise', '~> 4.3.2' # here a gem is allowed to be updated between >= 4.3.2 and < 4.4
+```
+
+Remove a patch version `4.3 instead of 4.3.2` to allow updates within a minor version range:
+
+```ruby
+gem 'devise', '~> 4.3' # here the pessimistic operator ensures gem updates within >= 4.3 and < 5.0 range
+```
+
+Specifying patch-level versions like `~> 4.3.1` in your Gemfile using the pessimistic locking operator `~>` ensures that gem fixes are automatically provided on `bundle update`, but major potentially breaking changes are not introduced. The downside of this is that manual bumping of gem versions is required to stay up to date with updates.
 
 ### Rails ActiveRecord model structure
 
