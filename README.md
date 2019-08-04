@@ -5,6 +5,7 @@
 - [Patterns](#patterns)
   - [Service Object](#service-object)
   - [Decorator](#decorator)
+  - [Facade](#facade)
 - [Development Tools](#development-tools)
   - [Mastering GIT](#mastering-git)
   - [Continuous Integration](#continuous-integration)
@@ -250,6 +251,84 @@ end
 
 Which would allow to decorate a collection with `CommentDecorator.decorate_collection(user_comments)`.
 
+### Facade
+
+The Facade pattern in Rails is based on moving all the logic from a controller action to a facade and creating a single instance variable with that facade, which is then used in views. Below is an example of refactoring a controller action using the facade pattern:
+
+```ruby
+class InterviewsController < ApplicationController
+  def new
+    @interview = current_user.interviews.build
+    @countries = Country.all.map { |c| [c.name, c.id] }
+    Section.all.each do |section|
+      @interview.answers.build(
+        content: "",
+        section_id: section.id
+      )
+    end
+  end
+end
+```
+
+`@interview` and `@countries` have been moved to public instance methods in the facade. The logic with built answers has been moved to a private method, with the help of refactoring how a new interview is built.
+
+```ruby
+class InterviewsController < ApplicationController
+  def new
+    @facade = NewFacade.new(current_user.id)
+  end
+end
+```
+
+```ruby
+class InterviewsController::NewFacade
+  include InterviewsController::Common
+
+  def initialize(user_id)
+    @user_id = user_id
+  end
+
+  def interview
+    Interview.new(user_id: user_id, answers: answers)
+  end
+
+  private
+
+  attr_reader :user_id
+
+  def answers
+    Section.ids.map do |section_id|
+      Answer.new(content: '', section_id: section_id)
+    end
+  end
+end
+```
+
+```ruby
+module InterviewsController::Common
+  # this has been put in the module because of being shared across multiple facades
+  def countries
+    @countries ||= Country.pluck(:name, :id)
+  end
+end
+```
+
+```ruby
+= form_for @facade.interview do |f| # using in a view
+```
+
+Pros:
+
+- Makes controllers skinnier, thus easier to read
+- Uses a single instance variable for a corresponding facade
+- Complies with SRP
+- Makes testing of both controllers and facades easier
+- Decrease the barrier of changing code
+
+Cons:
+
+- Add an extra layer of abstraction, which in turn requires some time to adjust
+- Generates plenty of new classes and corresponding specs
 
 ## Development Tools
 
