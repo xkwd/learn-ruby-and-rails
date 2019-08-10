@@ -15,6 +15,7 @@
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
+  - [DB migrations](#db-migrations)
 
 ## Patterns
 
@@ -677,3 +678,28 @@ class Model < ApplicationRecord
   private # .................................everything below is private
 end
 ```
+
+### DB migrations
+```ruby
+add_column :interviews, :type, :integer, default: 0, null: false # add a column for `type` enum
+add_column :interviews, :format, :string # add a string column
+add_column :interviews, :extra, :jsonb, default: {} # add a jsonb column
+add_column :interviews, :rate, :decimal, precision: 8, scale: 2 # add a decimal column
+rename_column :interviews, :type, :kind # rename type to kind
+change_column_default :interviews, :type, 2 # change the type default to 2
+change_column_null :interviews, :editor_id, false # add `null: false` to editor_id
+add_index :interviews, :uuid, unique: true # add a unique index on the uuid column
+add_index :interviews, [:type, :country_id], unique: true # add an index on two columns
+add_index :interviews, [:type, :user_id, :country_id, :slug], unique: true, name: :index_on_
+remove_index :interviews, :uuid
+remove_index :interviews, [:type, :country_id]
+remove_index :interviews, name: "index_on_ ..."
+add_reference :interviews, :country, foreign_key: true, null: false, index: true # add country_id to interviews table with the FK constraint
+# The examples below require verification
+# when an association name is different from a table name
+# adding a correct foreign key might require an extra step:
+add_reference :interviews, :editor, references: :users, index: true # step 1
+add_foreign_key :interviews, :users, column: :editor_id, primary_key: :id # step 2
+```
+
+When planning to add a null constraint, first add a field, then make sure all records in production have a value other than null, and only then add a null constraint in a new migration file.
