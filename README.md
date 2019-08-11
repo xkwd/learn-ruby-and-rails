@@ -16,6 +16,8 @@
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
   - [DB migrations](#db-migrations)
+- [Ruby tips](#ruby-tips)
+  - [The method_missing method](#the-method-missing-method)
 
 ## Patterns
 
@@ -703,3 +705,28 @@ add_foreign_key :interviews, :users, column: :editor_id, primary_key: :id # step
 ```
 
 When planning to add a null constraint, first add a field, then make sure all records in production have a value other than null, and only then add a null constraint in a new migration file.
+
+## Ruby tips
+
+### The method_missing method
+
+`method_missing` allows to handle calling a method that does not exist. When added to a class, it gives control of what should happen with a missing method instead of raising `NoMethodError`. One of the options is to delegate message call to another object:
+
+```ruby
+class Presenter
+  def initialize(object)
+    @object = object
+  end
+
+  private
+
+  def method_missing(name, *args, &block)
+    @object.send(name, *args, &block) # this delegates the name method to another object where the name method is implemented
+  end
+end
+
+Presenter.new(:object).length # This returns the length of :object symbol
+# => 6
+Presenter.new(:object).to_s # Be careful with methods like `to_s` inherited from Object
+# => #<Presenter:0x000...>
+```
