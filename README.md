@@ -18,6 +18,7 @@
   - [DB migrations](#db-migrations)
 - [Ruby tips](#ruby-tips)
   - [The method_missing method](#the-method-missing-method)
+  - [Initialize - self.name vs @name](#initialize-self.name-vs-@name)
 
 ## Patterns
 
@@ -730,3 +731,44 @@ Presenter.new(:object).length # This returns the length of :object symbol
 Presenter.new(:object).to_s # Be careful with methods like `to_s` inherited from Object
 # => #<Presenter:0x000...>
 ```
+
+### Initialize - self.name vs @name
+
+There are two ways to set instance attributes:
+
+```ruby
+def initialize(name)
+  self.name = name # this makes a method call to name=
+end
+
+private
+
+attr_accessor :name # this is required
+
+def name=(value) # an optional custom writer; if used, attr_accessor should be replaced with attr_reader
+  @name ||= # ...
+end
+```
+
+Pros:
+
+- Better error catching: it is possible to access an instance variable without first defining it. There is no raised exception when accessing an undefined instance variable and the default value is `nil`. This may lead to difficult-to-track errors. When using `self.` an error message (e.g. `NameError`) is always explicit, pointing to an attribute which has raised an error.
+- Allows to write a custom writer, which is run on object initialization.
+- Allows to use `klass.send(:attr_name)`.
+
+```ruby
+def initialize(name)
+  @name = name # this just sets a private instance variable
+end
+
+private
+
+attr_reader :name # this is optional; allows to access an attribute without `@` sign
+```
+
+Pros:
+
+- Doesn't require `attr_accessor` to be defined.
+- With the private `attr_reader` doesn't require `attr_writer` as `self.name` does, yet still allows to access an attribute with a getter, same as in the case of `self.name`.
+
+Also remember that using `attr_accessor` (same for `attr_reader` and `attr_writer`) instead of writing a getter/setter on your own is faster due to its implementation in C.
