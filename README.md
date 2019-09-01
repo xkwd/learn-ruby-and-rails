@@ -17,8 +17,8 @@
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
   - [DB migrations](#db-migrations)
 - [Ruby tips](#ruby-tips)
-  - [The method_missing method](#the-method-missing-method)
-  - [Initialize - self.name vs @name](#initialize-self.name-vs-@name)
+  - [The method_missing method](#the-method_missing-method)
+  - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
 
 ## Patterns
 
