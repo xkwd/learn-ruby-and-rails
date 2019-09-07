@@ -457,6 +457,60 @@ e - manually edit the current hunk
 - [Travis](https://travis-ci.org/)
 - [Jenkins](https://jenkins.io/)
 
+#### 4. CircleCI sample config
+
+```yml
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.2-node-browsers
+        environment:
+          BUNDLE_PATH: vendor/bundle
+          PGHOST: 127.0.0.1
+          PGUSER: circleci
+          RAILS_ENV: test
+      - image: circleci/postgres:10.2
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_DB: intapp_test
+          POSTGRES_PASSWORD: ""
+    working_directory: ~/interview-app
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+      - run: cp config/database.yml.example config/database.yml
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+      - run:
+          name: run RSpec
+          command: |
+            mkdir /tmp/test-results
+            bundle exec rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $(circleci tests glob "spec/**/*_spec.rb" | \
+                circleci tests split)
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+```
+
 ### RSpec basics
 
 #### 1. Overview
