@@ -432,6 +432,7 @@ e - manually edit the current hunk
 ? - print help
 ```
 
+`git log --grep="keyword"` - shows commits with messages including the keyword
 ### Continuous Integration
 
 #### 1. Overview
