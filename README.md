@@ -12,6 +12,7 @@
 - [RSpec basics](#rspec-basics)
   - [Model tests](#3-model-tests)
   - [Decorator tests](#4-decorator-tests)
+  - [Rspec tips](#5-rspec-tips)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -728,6 +729,10 @@ RSpec.describe InterviewDecorator do
 end
 
 ```
+
+#### 5. RSpec tips
+
+`bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
 
 ## Rails tips
 
