@@ -16,6 +16,7 @@
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
+  - [How to update gems](#how-to-update-gems)
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
   - [DB migrations](#db-migrations)
 - [Ruby tips](#ruby-tips)
@@ -797,6 +798,17 @@ gem 'devise', '~> 4.3' # here the pessimistic operator ensures gem updates withi
 ```
 
 Specifying patch-level versions like `~> 4.3.1` in your Gemfile using the pessimistic locking operator `~>` ensures that gem fixes are automatically provided on `bundle update`, but major potentially breaking changes are not introduced. The downside of this is that manual bumping of gem versions is required to stay up to date with updates.
+
+### How to update gems
+
+- `bundle outdated` - to see the list of outdated gems.
+- `bundle update` - try to update all gems if such update is possible/acceptable.
+- `bundle update devise rspec` - or update specific gems by listing their names.
+- make sure that your tests are passing after running the update.
+- `git checkout Gemfile.lock` if tests has failed and it is hard to figure out which gem was the reason for that. Proceed with updates per a gem.
+- otherwise, downgrade a specific gem by editing `Gemfile.lock`. The practice of updating `Gemfile.lock` is not suggested, yet doable.
+- run `bundle outdated` again to see which gems couldn't be updated. Look into the source of each gem (issues, PRs) to identify the status of an issue. A fix for example could already be on the master.
+- if an issue has been already fixed on the master, yet without a release, you could use git as a source instead of rubygems -> `gem 'pg', git: 'https://github.com/ged/ruby-pg'`
 
 ### Rails ActiveRecord model structure
 
