@@ -22,6 +22,7 @@
 - [Ruby tips](#ruby-tips)
   - [The method_missing method](#the-method_missing-method)
   - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
+  - [Positional and keyword parameters](#positional-and-keyword-parameters)
 
 ## Patterns
 
@@ -920,3 +921,27 @@ Pros:
 - With the private `attr_reader` doesn't require `attr_writer` as `self.name` does, yet still allows to access an attribute with a getter, same as in the case of `self.name`.
 
 Also remember that using `attr_accessor` (same for `attr_reader` and `attr_writer`) instead of writing a getter/setter on your own is faster due to its implementation in C.
+
+### Positional and keyword parameters
+
+```ruby
+  def print(name) # positional parameter, required
+  def print(name = 'John') # positional parameter with a default value
+  def print(name:) # keyword parameter, required
+  def print(name: 'John') # keyword parameter with a default value
+    p name
+  end
+```
+
+Positional parameters:
+
+- The shortest option
+- Require to preserve the order. If the order of the parameters is changed in the original implementation, this order should also be changed everywhere the method is called
+- The need to look at the implementation to know more about each parameter
+
+Keyword parameters:
+
+- Verbose
+- No coupling to the order of the parameters
+- The meaning of the parameters is known without looking at the implementation
+- Explicit `ArgumentError` pointing to a missing argument
