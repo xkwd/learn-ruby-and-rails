@@ -23,6 +23,7 @@
   - [The method_missing method](#the-method_missing-method)
   - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
   - [Positional and keyword parameters](#positional-and-keyword-parameters)
+  - [Alternative to string interpolation](#alternative-to-string-interpolation)
 
 ## Patterns
 
@@ -945,3 +946,10 @@ Keyword parameters:
 - No coupling to the order of the parameters
 - The meaning of the parameters is known without looking at the implementation
 - Explicit `ArgumentError` pointing to a missing argument
+
+### Alternative to string interpolation
+
+```ruby
+  "coordinates: #{x}, #{y}" # string interpolation
+  format('coordinates: %<x>s, %<y>s', x: x, y: y) # Kernel.format
+```
