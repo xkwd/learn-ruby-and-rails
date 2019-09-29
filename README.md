@@ -19,6 +19,7 @@
   - [How to update gems](#how-to-update-gems)
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
   - [DB migrations](#db-migrations)
+  - [Multi-line strings](#multi-line-strings)
 - [Ruby tips](#ruby-tips)
   - [The method_missing method](#the-method_missing-method)
   - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
@@ -856,6 +857,26 @@ add_foreign_key :interviews, :users, column: :editor_id, primary_key: :id # step
 ```
 
 When planning to add a null constraint, first add a field, then make sure all records in production have a value other than null, and only then add a null constraint in a new migration file.
+
+### Multi-line strings
+
+```ruby
+  'a really long string ' \
+  'on multiple lines'
+  # => "a really long string on multiple lines"
+
+  %{
+    a really long string
+    on multiple lines
+  }.squish
+  # => "a really long string on multiple lines"
+
+  <<-EOS.squish
+    a really long string
+    on multiple lines
+  EOS
+  # => "a really long string on multiple lines"
+```
 
 ## Ruby tips
 
