@@ -738,6 +738,15 @@ end
 
 `bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
 
+```ruby
+  # This makes a mock with a return value equal to a passed argument.
+  # Such technique, without using the params variable let(:params),
+  # allows to test other modifications (e.g. with a setter) of the params.
+  allow(ParamsModifier).to receive(:call) do |params|
+    params
+  end
+```
+
 ## Rails tips
 
 ### Rails commands
