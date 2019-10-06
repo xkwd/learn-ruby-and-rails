@@ -25,6 +25,7 @@
   - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
   - [Positional and keyword parameters](#positional-and-keyword-parameters)
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
+  - [Set object state with a block](#set-object-state-with-a-block)
 
 ## Patterns
 
@@ -982,4 +983,35 @@ Keyword parameters:
 ```ruby
   "coordinates: #{x}, #{y}" # string interpolation
   format('coordinates: %<x>s, %<y>s', x: x, y: y) # Kernel.format
+```
+
+### Set object state with a block
+
+```ruby
+class Interview
+  attr_accessor :title
+
+  def initialize(title = '')
+    @title = title
+    yield self if block_given?
+  end
+end
+
+# using a constructor
+Interview.new(title = 'Ruby')
+# => #<Interview:0x00007f9f79191d90 @title="Ruby">
+
+# using a variable
+interview = Interview.new
+interview.title = 'Ruby'
+interview
+# => #<Interview:0x00007fe76a118e98 @title="Ruby">
+
+# using a block
+Interview.new { |interview| interview.title = 'Ruby' }
+# => #<Interview:0x00007fe76a0f21a8 @title="Ruby">
+
+# using #tap, which allows to omit the interview variable
+Interview.new.tap { |interview| interview.title = 'Ruby' }
+# => #<Interview:0x00007fe76a1007a8 @title="Ruby">
 ```
