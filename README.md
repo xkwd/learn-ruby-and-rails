@@ -26,6 +26,7 @@
   - [Positional and keyword parameters](#positional-and-keyword-parameters)
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
+- [Vocabulary](#vocabulary)
 
 ## Patterns
 
@@ -1015,3 +1016,11 @@ Interview.new { |interview| interview.title = 'Ruby' }
 Interview.new.tap { |interview| interview.title = 'Ruby' }
 # => #<Interview:0x00007fe76a1007a8 @title="Ruby">
 ```
+
+## Vocabulary
+
+Object state:
+- The convention is to set the state within a constructor (the initialize method)
+- Persists across object's lifetime
+- Is defined with an instance variable (`@name`) or a method (`self.name`)
+- May change from the moment of object's initialization
