@@ -26,6 +26,7 @@
   - [Positional and keyword parameters](#positional-and-keyword-parameters)
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
+  - [Methods and tips](#methods-and-tips)
 - [Vocabulary](#vocabulary)
 
 ## Patterns
@@ -1015,6 +1016,14 @@ Interview.new { |interview| interview.title = 'Ruby' }
 # using #tap, which allows to omit the interview variable
 Interview.new.tap { |interview| interview.title = 'Ruby' }
 # => #<Interview:0x00007fe76a1007a8 @title="Ruby">
+```
+
+### Methods and tips
+
+```ruby
+  # Array#product
+  [25, 100, 2].product([4, 7]) # => [[25, 4], [25, 7], [100, 4], [100, 7], [2, 4], [2, 7]]
+  [25, 100, 2].product([]) # => []
 ```
 
 ## Vocabulary
