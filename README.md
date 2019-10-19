@@ -1024,6 +1024,9 @@ Interview.new.tap { |interview| interview.title = 'Ruby' }
   # Array#product
   [25, 100, 2].product([4, 7]) # => [[25, 4], [25, 7], [100, 4], [100, 7], [2, 4], [2, 7]]
   [25, 100, 2].product([]) # => []
+
+  # Array.new
+  Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
 ```
 
 ## Vocabulary
