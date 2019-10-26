@@ -1289,3 +1289,8 @@ Object state:
 - Persists across object's lifetime
 - Is defined with an instance variable (`@name`) or a method (`self.name`)
 - May change from the moment of object's initialization
+
+Idempotent method:
+- Is when the result of a method call is independent of the number of execution times
+- Important when building a fault-tolerant API
+- POST/PATCH are not idempotent HTTP methods
