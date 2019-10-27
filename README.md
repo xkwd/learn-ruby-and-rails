@@ -28,7 +28,7 @@
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
   - [Methods and tips](#methods-and-tips)
-- [Vocabulary](#vocabulary)
+- [Glossary](#glossary)
 
 ## Patterns
 
@@ -1282,7 +1282,7 @@ Interview.new.tap { |interview| interview.title = 'Ruby' }
   Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
 ```
 
-## Vocabulary
+## Glossary
 
 Object state:
 - The convention is to set the state within a constructor (the initialize method)
