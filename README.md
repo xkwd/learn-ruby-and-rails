@@ -10,10 +10,12 @@
   - [Mastering GIT](#mastering-git)
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
+  - [RSpec overview](#1-rspec-overview)
+  - [RSpec glossary](#2-rspec-glossary)
   - [Model tests](#3-model-tests)
   - [Controller tests](#4-controller-tests)
-  - [Decorator tests](#4-decorator-tests)
-  - [Rspec tips](#5-rspec-tips)
+  - [Decorator tests](#5-decorator-tests)
+  - [Rspec tips](#6-rspec-tips)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -524,7 +526,7 @@ jobs:
 
 ### RSpec basics
 
-#### 1. Overview
+#### 1. RSpec overview
 
 Unit tests (or specs) are used for testing of a single component (class or module). Only public methods should be tested, not private ones. Public methods do represent a public interface of a component.
 
@@ -532,7 +534,7 @@ Besides units tests there are integration tests. They are used when testing goes
 
 Both unit and integration tests should cover happy path (e.g. with valid arguments), unhappy path (e.g. with invalid arguments) and edge cases (e.g. division by zero).
 
-#### 2. RSpec vocabulary
+#### 2. RSpec glossary
 
 `describe` followed by a class name under testing begins a test file.
 
@@ -915,7 +917,7 @@ RSpec.describe InterviewsController, type: :controller do
 end
 ```
 
-#### 4. Decorator tests
+#### 5. Decorator tests
 
 ```ruby
 # app/decorators/interview_decorator.rb
@@ -990,7 +992,7 @@ end
 
 ```
 
-#### 5. RSpec tips
+#### 6. RSpec tips
 
 `bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
 
