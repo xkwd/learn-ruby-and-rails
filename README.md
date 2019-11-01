@@ -1296,3 +1296,8 @@ Idempotent method:
 - Is when the result of a method call is independent of the number of execution times
 - Important when building a fault-tolerant API
 - POST/PATCH are not idempotent HTTP methods
+
+Predicate method:
+- Syntactically ends with a question mark (?)
+- Returns only a truthy result (`true`, `false`)
+- Does not require prefixing: use `forbidden?`, not `is_forbidden?`
