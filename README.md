@@ -1005,6 +1005,15 @@ end
   end
 ```
 
+```ruby
+  # stub - replaces a method (#call) with the code that returns a specified result (true):
+  let(:uploader) { instance_double(InterviewUploader) }
+  allow(uploader).to receive_messages(call: true)
+
+  # mock - a stub (see above) with an expectation that the method gets called:
+  expect(uploader).to have_received(:call).with(:interview)
+```
+
 ## Rails tips
 
 ### Rails commands
