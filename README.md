@@ -23,6 +23,7 @@
   - [Rails ActiveRecord model structure](#rails-activerecord-model-structure)
   - [DB migrations](#db-migrations)
   - [Multi-line strings](#multi-line-strings)
+  - [Different flavors of scopes](#different-flavors-of-scopes)
 - [Ruby tips](#ruby-tips)
   - [The method_missing method](#the-method_missing-method)
   - [Initialize - self.name vs @name](#initialize---selfname-vs-name)
@@ -1152,6 +1153,33 @@ When planning to add a null constraint, first add a field, then make sure all re
     on multiple lines
   EOS
   # => "a really long string on multiple lines"
+```
+
+### Different flavors of scopes
+
+```ruby
+# app/models/interview.rb
+class Interview < ApplicationRecord
+  # flavor 1
+  scope :published, -> { where(published: true) }
+
+  # flavor 2 (see PublishedScope below)
+  scope :published, PublishedScope
+
+  # flavor 3
+  def self.published
+    where(published: true)
+  end
+end
+
+# app/models/interview/published_scope.rb
+class Interview::PublishedScope
+  def call
+    module_parent.where(published: true)
+  end
+
+  delegate :module_parent, to: :class
+end
 ```
 
 ## Ruby tips
