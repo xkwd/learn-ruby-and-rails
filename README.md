@@ -15,7 +15,8 @@
   - [Model tests](#3-model-tests)
   - [Controller tests](#4-controller-tests)
   - [Decorator tests](#5-decorator-tests)
-  - [Rspec tips](#6-rspec-tips)
+  - [Scope tests](#6-scope-tests)
+  - [Rspec tips](#7-rspec-tips)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -993,7 +994,43 @@ end
 
 ```
 
-#### 6. RSpec tips
+#### 6. Scope tests
+
+```ruby
+# app/models/interview/published_scope.rb
+class Interview::PublishedScope
+  def call
+    module_parent.where(published: true)
+  end
+
+  delegate :module_parent, to: :class
+end
+```
+
+```ruby
+require 'rails_helper'
+
+RSpec.describe Interview::PublishedScope do
+  describe '#call' do
+    let(:scope) { described_class.new }
+    let(:sql) { scope.call.to_sql }
+
+    it 'executes a valid SQL' do
+      expect { scope.call.load }.not_to raise_error
+    end
+
+    it 'generates an expected SQL' do
+      expect(sql.squish).to include(<<-SQL.squish), sql
+        SELECT "interviews".* FROM "interviews"
+        WHERE "interviews"."published" = TRUE
+      SQL
+    end
+  end
+end
+
+```
+
+#### 7. RSpec tips
 
 `bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
 
