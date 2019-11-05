@@ -1052,6 +1052,14 @@ end
   expect(uploader).to have_received(:call).with(:interview)
 ```
 
+When writing a test for a raised error there might be a need to check whether a certain object has been called. Adding a mock to the block of the `raise_error` matcher would do the trick:
+
+```ruby
+  expect { result }.to raise_error(CustomErrorName) do |_error|
+    expect(Connection).to have_received(:find).twice
+  end
+```
+
 ## Rails tips
 
 ### Rails commands
