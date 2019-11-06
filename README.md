@@ -32,6 +32,7 @@
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
   - [Methods and tips](#methods-and-tips)
+  - [Memoization](#memoization)
 - [Glossary](#glossary)
 
 ## Patterns
@@ -1365,6 +1366,27 @@ Interview.new.tap { |interview| interview.title = 'Ruby' }
   # Array.new
   Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
 ```
+
+### Memoization
+
+The most often memoization to avoid computation of the same value multiple times is the following:
+
+```ruby
+  def articles
+    @articles ||= # ...some computation
+  end
+```
+
+Where `@articles ||= something` is equivalent to `@articles || @articles = something`. And this means that `@articles` is only set if `@articles` is `falsey` - either `nil` or `false` - meaning that a `falsey` result of a computation would not be memoized and would make that computation run again on every call. Therefore, if a `falsey` value is one of the expected results, the `falsey` protected memoization should be used:
+
+```ruby
+def articles
+  return @articles if defined?(@articles)
+  @articles = # ...some computation
+end
+```
+
+Having test mocks with the number of calls of the memoized computation would ensure that the memoization is working as expected.
 
 ## Glossary
 
