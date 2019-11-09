@@ -1294,6 +1294,26 @@ Pros:
 
 Also remember that using `attr_accessor` (same for `attr_reader` and `attr_writer`) instead of writing a getter/setter on your own is faster due to its implementation in C.
 
+Using an instance variable allows to skip `attr_reader`:
+
+```ruby
+  def initialize(connection)
+    @connection = connection # this just sets a private instance variable
+  end
+
+  def method_name
+    Connection.find(@connection) # without an attr_reader
+  end
+```
+
+Pros:
+
+- Doesn't require `attr_reader` to be defined - less code to write
+
+Cons:
+
+- A typo or an unexpected `nil` value may lead to difficult-to-track errors
+
 ### Positional and keyword parameters
 
 ```ruby
