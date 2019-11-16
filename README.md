@@ -8,6 +8,7 @@
   - [Facade](#facade)
 - [Development Tools](#development-tools)
   - [Mastering GIT](#mastering-git)
+    - [Rebase onto master](#rebase-onto-master)
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
   - [RSpec overview](#1-rspec-overview)
@@ -448,6 +449,12 @@ e - manually edit the current hunk
 ```
 
 `git log --grep="keyword"` - shows commits with messages including the keyword
+
+##### Rebase onto master
+
+It is a very typical situation, when you need some not yet merged feature and you start a new branch based on another branch, which is not merged yet. It also always comes with a side effect of a base branch being merged to master at some point in time. The following command allows to rebase such branch onto master and preserve commits only with your new feature, without any extra commits.
+`git rebase --onto master used_to_be_base_branch_which_is_merged_to_master current_branch_which_is_being_rebased_into_master`
+
 ### Continuous Integration
 
 #### 1. Overview
