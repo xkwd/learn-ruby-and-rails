@@ -33,6 +33,7 @@
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
   - [Methods and tips](#methods-and-tips)
+    - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
 - [Glossary](#glossary)
 
@@ -1392,6 +1393,11 @@ Interview.new.tap { |interview| interview.title = 'Ruby' }
 
   # Array.new
   Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
+```
+
+#### Timestamp generator
+```ruby
+Time.now.utc.strftime('%Y%m%d%H%M%S') # => "20191117151018"
 ```
 
 ### Memoization
