@@ -18,6 +18,7 @@
   - [Decorator tests](#5-decorator-tests)
   - [Scope tests](#6-scope-tests)
   - [Rspec tips](#7-rspec-tips)
+    - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -1067,6 +1068,16 @@ When writing a test for a raised error there might be a need to check whether a 
   expect { result }.to raise_error(CustomErrorName) do |_error|
     expect(Connection).to have_received(:find).twice
   end
+```
+
+##### Stub for iterative object initialization
+
+When objects are initialized within an iterator, the following shorter initialization stub for each iteration could be used:
+
+```ruby
+allow(Models::Interview).to receive(:new) do |params|
+  instance_double(Models::Interview, title: params[:title])
+end
 ```
 
 ## Rails tips
