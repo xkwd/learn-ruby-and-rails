@@ -36,6 +36,7 @@
   - [Methods and tips](#methods-and-tips)
     - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
+  - [One-liner nested hash creation](#one-liner-nested-hash-creation)
 - [Glossary](#glossary)
 
 ## Patterns
@@ -1431,6 +1432,11 @@ end
 ```
 
 Having test mocks with the number of calls of the memoized computation would ensure that the memoization is working as expected.
+
+### One-liner nested hash creation
+```ruby
+Hash.new { |hash, key| hash[key] = Hash.new(&hash.default_proc) }
+```
 
 ## Glossary
 
