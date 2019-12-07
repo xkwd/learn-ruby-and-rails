@@ -37,6 +37,8 @@
     - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
+- [Ruby gems](#ruby-gems)
+  - [similar_text](#similar_text)
 - [Glossary](#glossary)
 
 ## Patterns
@@ -1436,6 +1438,14 @@ Having test mocks with the number of calls of the memoized computation would ens
 ### One-liner nested hash creation
 ```ruby
 Hash.new { |hash, key| hash[key] = Hash.new(&hash.default_proc) }
+```
+
+## Ruby gems
+
+### similar_text
+
+```ruby
+'Learning Ruby'.similar('Ruby tips') #=> 36.36363636363637
 ```
 
 ## Glossary
