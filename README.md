@@ -18,6 +18,10 @@
   - [Decorator tests](#5-decorator-tests)
   - [Scope tests](#6-scope-tests)
   - [Rspec tips](#7-rspec-tips)
+    - [Running a spec with a specified seed](#running-a-spec-with-a-specified-seed)
+    - [Stubbing method call via block with access to passed arguments](#stubbing-method-call-via-block-with-access-to-passed-arguments)
+    - [Stub vs Mock](#stub-vs-mock)
+    - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
     - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
@@ -1045,16 +1049,23 @@ end
 
 #### 7. RSpec tips
 
+##### Running a spec with a specified seed
+
 `bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
 
+##### Stubbing method call via block with access to passed arguments
+
 ```ruby
-  # This makes a mock with a return value equal to a passed argument.
+  # This makes a stub with a return value equal to a passed argument.
   # Such technique, without using the params variable let(:params),
   # allows to test other modifications (e.g. with a setter) of the params.
   allow(ParamsModifier).to receive(:call) do |params|
     params
   end
 ```
+
+##### Stub vs Mock
+
 
 ```ruby
   # stub - replaces a method (#call) with the code that returns a specified result (true):
@@ -1064,6 +1075,8 @@ end
   # mock - a stub (see above) with an expectation that the method gets called:
   expect(uploader).to have_received(:call).with(:interview)
 ```
+
+##### Adding mocks inside of the raise_error matcher
 
 When writing a test for a raised error there might be a need to check whether a certain object has been called. Adding a mock to the block of the `raise_error` matcher would do the trick:
 
