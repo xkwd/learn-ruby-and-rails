@@ -23,6 +23,7 @@
     - [Stub vs Mock](#stub-vs-mock)
     - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
     - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
+    - [Mock for multiple method calls with different arguments](#mock-for-multiple-method-calls-with-different-arguments)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -1094,6 +1095,12 @@ When objects are initialized within an iterator, the following shorter initializ
 allow(Models::Interview).to receive(:new) do |params|
   instance_double(Models::Interview, title: params[:title])
 end
+```
+
+##### Mock for multiple method calls with different arguments
+
+```ruby
+expect(Service).to have_received(:call).with(:argument1).with(:argument2)
 ```
 
 ## Rails tips
