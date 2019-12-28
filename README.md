@@ -42,6 +42,7 @@
     - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
+  - [Gem versioning](#gem-versioning)
 - [Ruby gems](#ruby-gems)
   - [similar_text](#similar_text)
 - [Glossary](#glossary)
@@ -1459,6 +1460,14 @@ Having test mocks with the number of calls of the memoized computation would ens
 ```ruby
 Hash.new { |hash, key| hash[key] = Hash.new(&hash.default_proc) }
 ```
+
+### Gem versioning
+
+Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1`), when releasing a new version bump the corresponding version depending on changes:
+
+- `MAJOR` [`3.5.1` -> `4.0.0`] when making incompatible API changes
+- `MINOR` [`3.5.1` -> `3.6.0`] when adding functionality in a backwards compatible manner
+- `PATCH` [`3.5.1` -> `3.5.2`] when adding backwards compatible bug fixes
 
 ## Ruby gems
 
