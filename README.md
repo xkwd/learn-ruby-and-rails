@@ -38,8 +38,9 @@
   - [Positional and keyword parameters](#positional-and-keyword-parameters)
   - [Alternative to string interpolation](#alternative-to-string-interpolation)
   - [Set object state with a block](#set-object-state-with-a-block)
-  - [Methods and tips](#methods-and-tips)
-    - [Timestamp generator](#timestamp-generator)
+  - [Product of two arrays](#product-of-two-arrays)
+  - [Array generator](#array-generator)
+  - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
   - [Gem versioning](#gem-versioning)
@@ -1419,18 +1420,20 @@ Interview.new.tap { |interview| interview.title = 'Ruby' }
 # => #<Interview:0x00007fe76a1007a8 @title="Ruby">
 ```
 
-### Methods and tips
+### Product of two arrays
 
 ```ruby
-  # Array#product
   [25, 100, 2].product([4, 7]) # => [[25, 4], [25, 7], [100, 4], [100, 7], [2, 4], [2, 7]]
   [25, 100, 2].product([]) # => []
+```
 
-  # Array.new
+### Array generator
+
+```ruby
   Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
 ```
 
-#### Timestamp generator
+### Timestamp generator
 ```ruby
 Time.now.utc.strftime('%Y%m%d%H%M%S') # => "20191117151018"
 ```
