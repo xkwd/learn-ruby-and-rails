@@ -47,6 +47,9 @@
 - [Ruby gems](#ruby-gems)
   - [similar_text](#similar_text)
 - [Glossary](#glossary)
+  - [Object state](#object-state)
+  - [Idempotent method](#idempotent-method)
+  - [Predicate method](#predicate-method)
 
 ## Patterns
 
@@ -1482,18 +1485,21 @@ Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1
 
 ## Glossary
 
-Object state:
+### Object state
+
 - The convention is to set the state within a constructor (the initialize method)
 - Persists across object's lifetime
 - Is defined with an instance variable (`@name`) or a method (`self.name`)
 - May change from the moment of object's initialization
 
-Idempotent method:
+### Idempotent method
+
 - Is when the result of a method call is independent of the number of execution times
 - Important when building a fault-tolerant API
 - POST/PATCH are not idempotent HTTP methods
 
-Predicate method:
+### Predicate method
+
 - Syntactically ends with a question mark (?)
 - Returns only a truthy result (`true`, `false`)
 - Does not require prefixing: use `forbidden?`, not `is_forbidden?`
