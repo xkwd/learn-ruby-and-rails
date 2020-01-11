@@ -11,13 +11,13 @@
     - [Rebase onto master](#rebase-onto-master)
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
-  - [RSpec overview](#1-rspec-overview)
-  - [RSpec glossary](#2-rspec-glossary)
-  - [Model tests](#3-model-tests)
-  - [Controller tests](#4-controller-tests)
-  - [Decorator tests](#5-decorator-tests)
-  - [Scope tests](#6-scope-tests)
-  - [Rspec tips](#7-rspec-tips)
+  - [RSpec overview](#rspec-overview)
+  - [RSpec glossary](#rspec-glossary)
+  - [Model tests](#model-tests)
+  - [Controller tests](#controller-tests)
+  - [Decorator tests](#decorator-tests)
+  - [Scope tests](#scope-tests)
+  - [Rspec tips](#rspec-tips)
     - [Running a spec with a specified seed](#running-a-spec-with-a-specified-seed)
     - [Stubbing method call via block with access to passed arguments](#stubbing-method-call-via-block-with-access-to-passed-arguments)
     - [Stub vs Mock](#stub-vs-mock)
@@ -551,7 +551,7 @@ jobs:
 
 ### RSpec basics
 
-#### 1. RSpec overview
+#### RSpec overview
 
 Unit tests (or specs) are used for testing of a single component (class or module). Only public methods should be tested, not private ones. Public methods do represent a public interface of a component.
 
@@ -559,7 +559,7 @@ Besides units tests there are integration tests. They are used when testing goes
 
 Both unit and integration tests should cover happy path (e.g. with valid arguments), unhappy path (e.g. with invalid arguments) and edge cases (e.g. division by zero).
 
-#### 2. RSpec glossary
+#### RSpec glossary
 
 `describe` followed by a class name under testing begins a test file.
 
@@ -630,7 +630,7 @@ describe ClassName do
 
 Testing within multiple contexts usually leads to duplications. `shared_contexts` are used to group re-used variables usually defined after a `context` name and `shared_examples` - to group re-used tests. `include_context` and `include_examples` are used to include those previously defined re-used components.
 
-#### 3. Model tests
+#### Model tests
 
 [Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers) gem is a must have when testing Rails models. It provides one-liners that would otherwise require more code to test same things.
 
@@ -690,7 +690,7 @@ describe Article, type: :model do
 end
 ```
 
-#### 4. Controller tests
+#### Controller tests
 
 ```ruby
 # app/controllers/interviews_controller.rb
@@ -942,7 +942,7 @@ RSpec.describe InterviewsController, type: :controller do
 end
 ```
 
-#### 5. Decorator tests
+#### Decorator tests
 
 ```ruby
 # app/decorators/interview_decorator.rb
@@ -1017,7 +1017,7 @@ end
 
 ```
 
-#### 6. Scope tests
+#### Scope tests
 
 ```ruby
 # app/models/interview/published_scope.rb
@@ -1053,7 +1053,7 @@ end
 
 ```
 
-#### 7. RSpec tips
+#### RSpec tips
 
 ##### Running a spec with a specified seed
 
