@@ -7,8 +7,12 @@
   - [Decorator](#decorator)
   - [Facade](#facade)
 - [Development Tools](#development-tools)
-  - [Mastering GIT](#mastering-git)
-    - [Rebase onto master](#rebase-onto-master)
+  - [Using Git and GitHub](#using-git-and-github)
+    - [Aliases](#aliases)
+    - [Safer push force](#safer-push-force)
+    - [New feature development](#new-feature-development)
+    - [Committing only certain file changes](#committing-only-certain-file-changes)
+    - [Rebasing onto master](#rebasing-onto-master)
   - [Continuous Integration](#continuous-integration)
 - [RSpec basics](#rspec-basics)
   - [RSpec overview](#rspec-overview)
@@ -367,9 +371,9 @@ Cons:
 
 ## Development Tools
 
-### Mastering GIT
+### Using Git and GitHub
 
-#### 1. Use GIT aliases
+#### Aliases
 
 Type less. Use aliases.
 
@@ -399,7 +403,7 @@ $ type gs
 gs is an alias for git status
 ```
 
-#### 2. Push force carefully
+#### Safer push force
 
 Use `git push --force-with-lease` instead of `git push --force`
 
@@ -409,7 +413,7 @@ read more how it works [here](http://weiqingtoh.github.io/force-with-lease/).
 It is a long command to type, so create an alias for it ;)
 
 
-#### 3. Stick to the general work flow
+#### New feature development
 
 Begin from an updated master branch:
 
@@ -434,7 +438,7 @@ Let somebody make a review of your PR and merge it to the `master` branch after 
 
 In case you need to make some changes in a created PR, just add new commits to your branch and push to see them in that PR.
 
-#### 4. Useful tips
+#### Committing only certain file changes
 
 Use `git add -p` when only a portion of changes in a certain file has to be committed. This might be useful when for example scope of changes in a file is beyond a single commit or when some undesirable local changes have suddenly appeared and require extra time for fixing.
 
@@ -465,7 +469,7 @@ e - manually edit the current hunk
 
 `git log --grep="keyword"` - shows commits with messages including the keyword
 
-##### Rebase onto master
+#### Rebasing onto master
 
 It is a very typical situation, when you need some not yet merged feature and you start a new branch based on another branch, which is not merged yet. It also always comes with a side effect of a base branch being merged to master at some point in time. The following command allows to rebase such branch onto master and preserve commits only with your new feature, without any extra commits.
 `git rebase --onto master used_to_be_base_branch_which_is_merged_to_master current_branch_which_is_being_rebased_into_master`
