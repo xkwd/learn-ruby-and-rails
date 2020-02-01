@@ -1,4 +1,17 @@
+# Ruby - Rails - RSpec - Tips - Patterns
+
+
 ![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/cover.png)
+
+This repository was created with an idea to collect worthy tips about Ruby/Rails development and currently covers the following topics:
+
+- [Ruby tips](#ruby-tips) - rather less obvious coding tips
+- [Rails tips](#rails-tips) - difficult to remember basic Rails tips
+- [RSpec basics](#rspec-basics) - code samples and workarounds for non-trivial cases
+- [Patterns](#patterns) - basic patterns
+- [Development Tools](#development-tools) - tips for committing and pushing code
+- [Ruby gems](#ruby-gems) - less popular but very useful Ruby gems
+- [Glossary](#glossary) - explanations for popular development words
 
 ## Table of contents
 
