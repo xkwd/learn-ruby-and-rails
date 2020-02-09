@@ -63,6 +63,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Gem versioning](#gem-versioning)
 - [Ruby gems](#ruby-gems)
   - [similar_text](#similar_text)
+  - [Kdtree](#kdtree)
 - [Glossary](#glossary)
   - [Object state](#object-state)
   - [Idempotent method](#idempotent-method)
@@ -1499,6 +1500,10 @@ Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1
 ```ruby
 'Learning Ruby'.similar('Ruby tips') #=> 36.36363636363637
 ```
+
+### Kdtree
+
+[Kdtree](https://github.com/gurgeous/kdtree) - the fastest Ruby gem to find the nearest neighbor or a set of the nearest neighbors using latitude and longitude of thousands of locations.
 
 ## Glossary
 
