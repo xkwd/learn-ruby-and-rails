@@ -40,7 +40,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
     - [Stub vs Mock](#stub-vs-mock)
     - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
     - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
-    - [Mock for multiple method calls with different arguments](#mock-for-multiple-method-calls-with-different-arguments)
+    - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -1120,10 +1120,17 @@ allow(Models::Interview).to receive(:new) do |params|
 end
 ```
 
-##### Mock for multiple method calls with different arguments
+##### Stub and Mock for multiple method calls with different arguments
 
 ```ruby
-expect(Service).to have_received(:call).with(:argument1).with(:argument2)
+allow(Service)
+  .to receive(:call)
+  .and_return(:first, :second)
+
+expect(Service)
+  .to have_received(:call)
+  .with(:argument1)
+  .with(:argument2)
 ```
 
 ## Rails tips
