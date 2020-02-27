@@ -34,6 +34,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Controller tests](#controller-tests)
   - [Decorator tests](#decorator-tests)
   - [Scope tests](#scope-tests)
+  - [Module tests](#module-tests)
   - [Rspec tips](#rspec-tips)
     - [Running a spec with a specified seed](#running-a-spec-with-a-specified-seed)
     - [Stubbing method call via block with access to passed arguments](#stubbing-method-call-via-block-with-access-to-passed-arguments)
@@ -1069,6 +1070,26 @@ RSpec.describe Interview::PublishedScope do
   end
 end
 
+```
+
+#### Module tests
+
+```ruby
+RSpec.describe ModuleName do
+  let(:test_class) do
+    Class.new do
+      include ModuleName
+
+      def some_method
+        # if needed
+      end
+    end
+  end
+
+  describe '#module_method' do
+    it { expect(test_class.new.module_method).to eq(:some_result) }
+  end
+end
 ```
 
 #### RSpec tips
