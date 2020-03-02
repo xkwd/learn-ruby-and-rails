@@ -42,6 +42,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
     - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
     - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
     - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
+    - [Customized failure message](#customized-failure-message)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -1152,6 +1153,16 @@ expect(Service)
   .to have_received(:call)
   .with(:argument1)
   .with(:argument2)
+```
+
+##### Customized failure message
+
+We can always improve the readability of the error message in the console by defining a custom message after the matcher:
+
+```ruby
+  it 'does this and that' do
+    expect(generated_output).to eq(expected_output), expected_output - generated_output
+  end
 ```
 
 ## Rails tips
