@@ -66,6 +66,8 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
 - [Ruby gems](#ruby-gems)
   - [similar_text](#similar_text)
   - [Kdtree](#kdtree)
+- [Debugging](#debugging)
+  - [How to debug a Ruby gem](#how-to-debug-a-ruby-gem)
 - [Glossary](#glossary)
   - [Object state](#object-state)
   - [Idempotent method](#idempotent-method)
@@ -1543,6 +1545,16 @@ Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1
 ### Kdtree
 
 [Kdtree](https://github.com/gurgeous/kdtree) - the fastest Ruby gem to find the nearest neighbor or a set of the nearest neighbors using latitude and longitude of thousands of locations.
+
+## Debugging
+
+### How to debug a Ruby gem
+
+`Bundler` offers a very convenient way to open a Ruby gem in an editor and be able to see the gem source code. Adding `binding.pry` where needed in the source code is a convenient way to debug:
+
+```shell
+EDITOR=atom bundle open <gem_name>
+```
 
 ## Glossary
 
