@@ -7,7 +7,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
 
 - [Ruby tips](#ruby-tips) - rather less obvious coding tips
 - [Rails tips](#rails-tips) - difficult to remember basic Rails tips
-- [RSpec basics](#rspec-basics) - code samples and workarounds for non-trivial cases
+- [RSpec tips](#rspec-tips) - code samples and workarounds for non-trivial cases
 - [Patterns](#patterns) - basic patterns
 - [Development Tools](#development-tools) - tips for committing and pushing code
 - [Ruby gems](#ruby-gems) - less popular but very useful Ruby gems
@@ -27,7 +27,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
     - [Committing only certain file changes](#committing-only-certain-file-changes)
     - [Rebasing onto master](#rebasing-onto-master)
   - [Continuous Integration](#continuous-integration)
-- [RSpec basics](#rspec-basics)
+- [RSpec tips](#rspec-tips)
   - [RSpec overview](#rspec-overview)
   - [RSpec glossary](#rspec-glossary)
   - [Model tests](#model-tests)
@@ -571,7 +571,7 @@ jobs:
           destination: test-results
 ```
 
-### RSpec basics
+### RSpec tips
 
 #### RSpec overview
 
