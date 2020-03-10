@@ -28,21 +28,21 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
     - [Rebasing onto master](#rebasing-onto-master)
   - [Continuous Integration](#continuous-integration)
 - [RSpec tips](#rspec-tips)
-  - [RSpec overview](#rspec-overview)
+  - [Unit vs integration tests](#unit-vs-integration-tests)
   - [RSpec glossary](#rspec-glossary)
-  - [Model tests](#model-tests)
-  - [Controller tests](#controller-tests)
-  - [Decorator tests](#decorator-tests)
-  - [Scope tests](#scope-tests)
-  - [Module tests](#module-tests)
-  - [Rspec tips](#rspec-tips)
-    - [Running a spec with a specified seed](#running-a-spec-with-a-specified-seed)
-    - [Stubbing method call via block with access to passed arguments](#stubbing-method-call-via-block-with-access-to-passed-arguments)
-    - [Stub vs Mock](#stub-vs-mock)
-    - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
-    - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
-    - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
-    - [Customized failure message](#customized-failure-message)
+  - [Running a spec with a specified seed](#running-a-spec-with-a-specified-seed)
+  - [Stubbing method call via block with access to passed arguments](#stubbing-method-call-via-block-with-access-to-passed-arguments)
+  - [Stub vs Mock](#stub-vs-mock)
+  - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
+  - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
+  - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
+  - [Customized failure message](#customized-failure-message)
+  - [Test examples](#test-examples)
+    - [Model tests](#model-tests)
+    - [Controller tests](#controller-tests)
+    - [Decorator tests](#decorator-tests)
+    - [Scope tests](#scope-tests)
+    - [Module tests](#module-tests)
 - [Rails tips](#rails-tips)
   - [Rails commands](#rails-commands)
   - [Gem versions in Gemfile](#gem-versions-in-gemfile)
@@ -573,7 +573,7 @@ jobs:
 
 ### RSpec tips
 
-#### RSpec overview
+#### Unit vs integration tests
 
 Unit tests (or specs) are used for testing of a single component (class or module). Only public methods should be tested, not private ones. Public methods do represent a public interface of a component.
 
@@ -652,7 +652,79 @@ describe ClassName do
 
 Testing within multiple contexts usually leads to duplications. `shared_contexts` are used to group re-used variables usually defined after a `context` name and `shared_examples` - to group re-used tests. `include_context` and `include_examples` are used to include those previously defined re-used components.
 
-#### Model tests
+#### Running a spec with a specified seed
+
+`bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
+
+#### Stubbing method call via block with access to passed arguments
+
+```ruby
+  # This makes a stub with a return value equal to a passed argument.
+  # Such technique, without using the params variable let(:params),
+  # allows to test other modifications (e.g. with a setter) of the params.
+  allow(ParamsModifier).to receive(:call) do |params|
+    params
+  end
+```
+
+#### Stub vs Mock
+
+
+```ruby
+  # stub - replaces a method (#call) with the code that returns a specified result (true):
+  let(:uploader) { instance_double(InterviewUploader) }
+  allow(uploader).to receive_messages(call: true)
+
+  # mock - a stub (see above) with an expectation that the method gets called:
+  expect(uploader).to have_received(:call).with(:interview)
+```
+
+#### Adding mocks inside of the raise_error matcher
+
+When writing a test for a raised error there might be a need to check whether a certain object has been called. Adding a mock to the block of the `raise_error` matcher would do the trick:
+
+```ruby
+  expect { result }.to raise_error(CustomErrorName) do |_error|
+    expect(Connection).to have_received(:find).twice
+  end
+```
+
+#### Stub for iterative object initialization
+
+When objects are initialized within an iterator, the following shorter initialization stub for each iteration could be used:
+
+```ruby
+allow(Models::Interview).to receive(:new) do |params|
+  instance_double(Models::Interview, title: params[:title])
+end
+```
+
+#### Stub and Mock for multiple method calls with different arguments
+
+```ruby
+allow(Service)
+  .to receive(:call)
+  .and_return(:first, :second)
+
+expect(Service)
+  .to have_received(:call)
+  .with(:argument1)
+  .with(:argument2)
+```
+
+#### Customized failure message
+
+We can always improve the readability of the error message in the console by defining a custom message after the matcher:
+
+```ruby
+  it 'does this and that' do
+    expect(generated_output).to eq(expected_output), expected_output - generated_output
+  end
+```
+
+#### Test examples
+
+##### Model tests
 
 [Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers) gem is a must have when testing Rails models. It provides one-liners that would otherwise require more code to test same things.
 
@@ -712,7 +784,7 @@ describe Article, type: :model do
 end
 ```
 
-#### Controller tests
+##### Controller tests
 
 ```ruby
 # app/controllers/interviews_controller.rb
@@ -964,7 +1036,7 @@ RSpec.describe InterviewsController, type: :controller do
 end
 ```
 
-#### Decorator tests
+##### Decorator tests
 
 ```ruby
 # app/decorators/interview_decorator.rb
@@ -1039,7 +1111,7 @@ end
 
 ```
 
-#### Scope tests
+##### Scope tests
 
 ```ruby
 # app/models/interview/published_scope.rb
@@ -1075,7 +1147,7 @@ end
 
 ```
 
-#### Module tests
+##### Module tests
 
 ```ruby
 RSpec.describe ModuleName do
@@ -1093,78 +1165,6 @@ RSpec.describe ModuleName do
     it { expect(test_class.new.module_method).to eq(:some_result) }
   end
 end
-```
-
-#### RSpec tips
-
-##### Running a spec with a specified seed
-
-`bundle exec rspec spec/models/comment_spec.rb --seed 39103` - run a spec with a specific seed to replicate for example a failed test.
-
-##### Stubbing method call via block with access to passed arguments
-
-```ruby
-  # This makes a stub with a return value equal to a passed argument.
-  # Such technique, without using the params variable let(:params),
-  # allows to test other modifications (e.g. with a setter) of the params.
-  allow(ParamsModifier).to receive(:call) do |params|
-    params
-  end
-```
-
-##### Stub vs Mock
-
-
-```ruby
-  # stub - replaces a method (#call) with the code that returns a specified result (true):
-  let(:uploader) { instance_double(InterviewUploader) }
-  allow(uploader).to receive_messages(call: true)
-
-  # mock - a stub (see above) with an expectation that the method gets called:
-  expect(uploader).to have_received(:call).with(:interview)
-```
-
-##### Adding mocks inside of the raise_error matcher
-
-When writing a test for a raised error there might be a need to check whether a certain object has been called. Adding a mock to the block of the `raise_error` matcher would do the trick:
-
-```ruby
-  expect { result }.to raise_error(CustomErrorName) do |_error|
-    expect(Connection).to have_received(:find).twice
-  end
-```
-
-##### Stub for iterative object initialization
-
-When objects are initialized within an iterator, the following shorter initialization stub for each iteration could be used:
-
-```ruby
-allow(Models::Interview).to receive(:new) do |params|
-  instance_double(Models::Interview, title: params[:title])
-end
-```
-
-##### Stub and Mock for multiple method calls with different arguments
-
-```ruby
-allow(Service)
-  .to receive(:call)
-  .and_return(:first, :second)
-
-expect(Service)
-  .to have_received(:call)
-  .with(:argument1)
-  .with(:argument2)
-```
-
-##### Customized failure message
-
-We can always improve the readability of the error message in the console by defining a custom message after the matcher:
-
-```ruby
-  it 'does this and that' do
-    expect(generated_output).to eq(expected_output), expected_output - generated_output
-  end
 ```
 
 ## Rails tips
