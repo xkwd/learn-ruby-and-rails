@@ -62,6 +62,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
+  - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
   - [Gem versioning](#gem-versioning)
 - [Ruby gems](#ruby-gems)
   - [similar_text](#similar_text)
@@ -1524,6 +1525,11 @@ Having test mocks with the number of calls of the memoized computation would ens
 ### One-liner nested hash creation
 ```ruby
 Hash.new { |hash, key| hash[key] = Hash.new(&hash.default_proc) }
+```
+
+### One-liner hash creation with array as default value
+```ruby
+Hash.new { |hash, key| hash[key] = [] }
 ```
 
 ### Gem versioning
