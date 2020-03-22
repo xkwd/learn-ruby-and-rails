@@ -65,6 +65,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
   - [Gem versioning](#gem-versioning)
 - [Ruby gems](#ruby-gems)
+  - [Bundler](#bundler)
   - [similar_text](#similar_text)
   - [Kdtree](#kdtree)
 - [Debugging](#debugging)
@@ -1541,6 +1542,14 @@ Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1
 - `PATCH` [`3.5.1` -> `3.5.2`] when adding backwards compatible bug fixes
 
 ## Ruby gems
+
+### Bundler
+```shell
+gem list bundler # check installed bundler versions
+gem install bundler -v "2.0.2" -N # install a specific version of bundler without documentation
+bundle _2.0.2_ install # run 'bundle install' with a specific version of Bundler
+EDITOR=atom bundle open <gem_name> # open a gem in a specified editor
+```
 
 ### similar_text
 
