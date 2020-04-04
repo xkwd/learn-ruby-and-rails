@@ -66,6 +66,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Gem versioning](#gem-versioning)
 - [Ruby gems](#ruby-gems)
   - [Bundler](#bundler)
+  - [Savon](#savon)
   - [similar_text](#similar_text)
   - [Kdtree](#kdtree)
 - [Debugging](#debugging)
@@ -1549,6 +1550,54 @@ gem list bundler # check installed bundler versions
 gem install bundler -v "2.0.2" -N # install a specific version of bundler without documentation
 bundle _2.0.2_ install # run 'bundle install' with a specific version of Bundler
 EDITOR=atom bundle open <gem_name> # open a gem in a specified editor
+```
+
+### Savon
+```ruby
+client = Savon.client(
+  wsdl: 'http://external-test.example.com/webservices/searchservice?wsdl',
+  endpoint: 'http://external-test.example.com/webservices/searchservice',
+  namespace: 'http://example.com/webservices/external',
+  namespaces: {
+    'xmlns:db'   => 'http://example.com/webservices/external/data/db',
+    'xmlns:request' => 'http://example.com/webservices/external/search/execute'
+  },
+  log: true,
+  log_level: :info,
+  basic_auth: ['username', 'password'],
+  headers: {
+    'User-Agent' => 'XMLClient',
+    'Content-Type' => 'application/text-plain',
+    'Connection' => 'close'
+  },
+  open_timeout: 20,
+  read_timeout: 20
+)
+
+client.operations # => [:operation1, :operaton2, :operation3]
+client.call(:operation1, message: message)
+puts client.build_request(:operation1, message: message).body
+client.wsdl.endpoint = '214.140.10.20'
+
+message = {
+  'Header' => {
+    :'@username' => 'username',
+    :'@timestamp' => 'timestamp'
+  },
+  'RequestData' => {
+    :'@from' => 'from',
+    :'@to' => 'to',
+    :'@count' => '2',
+    'Details' => {
+      :'@date' => 'date'
+    },
+    'Items' => {
+      'db:Inventory' => {
+        :'@sku' => '1440'
+      }
+    }
+  }
+}
 ```
 
 ### similar_text
