@@ -36,6 +36,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
   - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
   - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
+  - [Delay method execution](#delay-method-execution)
   - [Customized failure message](#customized-failure-message)
   - [Test examples](#test-examples)
     - [Model tests](#model-tests)
@@ -713,6 +714,15 @@ expect(Service)
   .to have_received(:call)
   .with(:argument1)
   .with(:argument2)
+```
+
+#### Delay method execution
+
+```ruby
+allow(service).to receive(:execute).and_wrap_original do |method, *args|
+  sleep 0.2
+  method.call(*args)
+end
 ```
 
 #### Customized failure message
