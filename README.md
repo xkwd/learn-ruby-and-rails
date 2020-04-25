@@ -65,6 +65,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
   - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
   - [Gem versioning](#gem-versioning)
+  - [Decorator Stack](#decorator-stack)
 - [Ruby gems](#ruby-gems)
   - [Bundler](#bundler)
   - [Savon](#savon)
@@ -1551,6 +1552,42 @@ Given that a ruby gem version has the format of `MAJOR.MINOR.PATCH` (e.g. `3.5.1
 - `MAJOR` [`3.5.1` -> `4.0.0`] when making incompatible API changes
 - `MINOR` [`3.5.1` -> `3.6.0`] when adding functionality in a backwards compatible manner
 - `PATCH` [`3.5.1` -> `3.5.2`] when adding backwards compatible bug fixes
+
+### Decorator Stack
+
+
+```ruby
+class DecoratorStack
+  def initialize
+    @decorators = []
+    yield(self) if block_given?
+  end
+
+  def add(klass, *args)
+    @decorators << [klass, args]
+  end
+
+  def decorate(object)
+    @decorators.each do |(klass, args)|
+      object = klass.decorate(object, *args)
+    end
+
+    object
+  end
+end
+```
+
+```ruby
+decorator_stack = DecoratorStack.new do |stack|
+  stack.add(Decorator1, optional_parameter_name: optional_parameter_value)
+  stack.add(Decorator2)
+  ...
+  stack.add(DecoratorN)
+end
+
+decorator_stack.decorate(some_object)
+```
+
 
 ## Ruby gems
 
