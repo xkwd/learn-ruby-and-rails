@@ -36,6 +36,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Adding mocks inside of the raise_error matcher](#adding-mocks-inside-of-the-raise_error-matcher)
   - [Stub for iterative object initialization](#stub-for-iterative-object-initialization)
   - [Stub and Mock for multiple method calls with different arguments](#stub-and-mock-for-multiple-method-calls-with-different-arguments)
+  - [Testing retry after rescue](#testing-retry-after-rescue)
   - [Delay method execution](#delay-method-execution)
   - [Customized failure message](#customized-failure-message)
   - [Test examples](#test-examples)
@@ -715,6 +716,33 @@ expect(Service)
   .to have_received(:call)
   .with(:argument1)
   .with(:argument2)
+```
+
+#### Testing retry after rescue
+
+```ruby
+def call
+  Service.call(:params)
+rescue StandardError => e
+  sleep 1
+  @retries += 1
+  retry if @retries <= 2
+  raise(e)
+end
+```
+
+```ruby
+before do
+  call_count = 0
+  allow(Service).to receive(:confirm) do
+    call_count += 1
+    call_count.odd? ? raise(StandardError) : :result
+  end
+
+  described_class.call
+end
+
+it { expect(Service).to have_received(:call).twice }
 ```
 
 #### Delay method execution
