@@ -67,6 +67,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
   - [Gem versioning](#gem-versioning)
   - [Decorator Stack](#decorator-stack)
+  - [Splatting with destructuring assignment](#splatting-with-destructuring-assignment)
 - [Ruby gems](#ruby-gems)
   - [Bundler](#bundler)
   - [Savon](#savon)
@@ -1652,6 +1653,20 @@ decorator_stack = DecoratorStack.new do |stack|
 end
 
 decorator_stack.decorate(some_object)
+```
+
+### Splatting with destructuring assignment
+
+```ruby
+*old, new, current = [1, 2, 3, 4, 5, 6, 7]
+old # => [1, 2, 3, 4, 5]
+new # => 6
+current # => 7
+
+new, *old, current = [1, 2, 3, 4, 5, 6, 7]
+new # => 1
+old # => [2, 3, 4, 5, 6]
+current # => 7
 ```
 
 
