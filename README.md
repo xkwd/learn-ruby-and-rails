@@ -1,3 +1,5 @@
+# Ruby - Rails - RSpec - Tips - Patterns
+
 ![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/cover.png)
 
 # Rubypedia
