@@ -599,17 +599,24 @@ before_install:
   - gem install bundler -v 2.2.27
 
 before_script:
+  - cp .env.example .env
   - if [ ! -f ./vendor/cc-test-reporter ]; then
     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./vendor/cc-test-reporter;
     chmod +x ./vendor/cc-test-reporter;
     fi
   - ./vendor/cc-test-reporter before-build
+  - export DATABASE_HOST=localhost
+  - psql -c 'CREATE DATABASE app_test;' -U postgres
+  - bundle exec sequel -m db/migrations postgres://localhost/app_test
 
 script:
   - bundle exec rake
 
 after_success:
   - ./vendor/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+addons:
+  postgresql: 9.6
 
 notifications:
   email: false
