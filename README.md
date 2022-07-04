@@ -1,7 +1,6 @@
-# Ruby - Rails - RSpec - Tips - Patterns
-
-
 ![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/cover.png)
+
+# Rubypedia
 
 This repository was created with an idea to collect worthy tips about Ruby/Rails development and currently covers the following topics:
 
