@@ -577,6 +577,44 @@ jobs:
           destination: test-results
 ```
 
+#### 5. Travis sample config
+
+```yml
+os: linux
+dist: xenial
+language: ruby
+rvm:
+  - 2.6.10
+  - 2.7.6
+  - 3.0.4
+
+cache:
+  directories:
+    - ./vendor
+
+env:
+  - COVERAGE=true
+
+before_install:
+  - gem install bundler -v 2.2.27
+
+before_script:
+  - if [ ! -f ./vendor/cc-test-reporter ]; then
+    curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./vendor/cc-test-reporter;
+    chmod +x ./vendor/cc-test-reporter;
+    fi
+  - ./vendor/cc-test-reporter before-build
+
+script:
+  - bundle exec rake
+
+after_success:
+  - ./vendor/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+notifications:
+  email: false
+```
+
 ### RSpec tips
 
 #### Unit vs integration tests
