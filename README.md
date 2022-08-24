@@ -74,6 +74,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Savon](#savon)
   - [similar_text](#similar_text)
   - [Kdtree](#kdtree)
+  - [PgSearch](#pgsearch)
 - [Debugging](#debugging)
   - [How to debug a Ruby gem](#how-to-debug-a-ruby-gem)
 - [Glossary](#glossary)
@@ -1745,6 +1746,34 @@ message = {
 ### Kdtree
 
 [Kdtree](https://github.com/gurgeous/kdtree) - the fastest Ruby gem to find the nearest neighbor or a set of the nearest neighbors using latitude and longitude of thousands of locations.
+
+### PgSearch
+
+[PgSearch](https://github.com/Casecommons/pg_search) - allows to search with PostgreSQL's full text search.
+
+```ruby
+class Car < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope(
+    :find_model,
+    against: :model,
+    using: {
+      tsearch: { any_word: true, normalization: 2 },
+      trigram: { word_similarity: true, threshold: 0.3 }
+    },
+  )
+end
+
+class AddTrigramIndexToCars < ActiveRecord::Migration[5.2]
+  def change
+    enable_extension :pg_trgm
+    add_index :cars, :model, using: :gin, opclass: { model: :gin_trgm_ops }
+  end
+end
+
+Car.find_model('Cx-5') # => 'CX5'
+```
 
 ## Debugging
 
