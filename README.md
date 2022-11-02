@@ -40,6 +40,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Testing retry after rescue](#testing-retry-after-rescue)
   - [Delay method execution](#delay-method-execution)
   - [Customized failure message](#customized-failure-message)
+  - [Skipping callbacks](#skipping-callbacks)
   - [Test examples](#test-examples)
     - [Model tests](#model-tests)
     - [Controller tests](#controller-tests)
@@ -810,6 +811,22 @@ We can always improve the readability of the error message in the console by def
   it 'does this and that' do
     expect(generated_output).to eq(expected_output), expected_output - generated_output
   end
+```
+
+#### Skipping callbacks
+
+```ruby
+class User < ApplicationRecord
+  after_create :assign_titles
+end
+
+FactoryBot.define do
+  factory :user do
+    factory :user_without_assign_titles do
+      after(:build) { |user| user.class.skip_callback(:create, :after, :assign_titles, raise: false) }
+    end
+  end
+end
 ```
 
 #### Test examples
