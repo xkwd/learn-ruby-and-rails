@@ -822,8 +822,10 @@ end
 
 FactoryBot.define do
   factory :user do
-    factory :user_without_assign_titles do
+    trait :user_without_assign_titles do
       after(:build) { |user| user.class.skip_callback(:create, :after, :assign_titles, raise: false) }
+
+      after(:create) { |user| user.class.set_callback(:create, :after, :assign_titles, raise: false) }
     end
   end
 end
