@@ -76,6 +76,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [similar_text](#similar_text)
   - [Kdtree](#kdtree)
   - [PgSearch](#pgsearch)
+  - [dry-struct](#dry-struct)
 - [Debugging](#debugging)
   - [How to debug a Ruby gem](#how-to-debug-a-ruby-gem)
 - [Glossary](#glossary)
@@ -1808,6 +1809,28 @@ class AddTrigramIndexToCars < ActiveRecord::Migration[5.2]
 end
 
 Car.find_model('Cx-5') # => 'CX5'
+```
+
+### dry-struct
+
+A gem for defining typed struct classes:
+
+```ruby
+module Types
+  include Dry.Types()
+end
+
+class Location < Dry::Struct
+  attribute :id, Types::Strict::Integer
+  attribute :name, Types::Strict::String
+  attribute :longitude, Types::Strict::Float.optional.default(nil)
+  attribute :latitude, Types::Strict::Float.optional.default(nil)
+  attribute? :active_since, Types::Strict::DateTime
+  attribute :indexes, Types::Array.of(Types::Coercible::String).default { [] }
+end
+
+Location.new(id: 2, name: 'default', indexes: [:a, :b])
+# => #<Location id=2 name="default" longitude=nil latitude=nil active_since=nil indexes=["a", "b"]>
 ```
 
 ## Debugging
