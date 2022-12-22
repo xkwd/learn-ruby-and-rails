@@ -1766,6 +1766,22 @@ message = {
 
 [Kdtree](https://github.com/gurgeous/kdtree) - the fastest Ruby gem to find the nearest neighbor or a set of the nearest neighbors using latitude and longitude of thousands of locations.
 
+```ruby
+locations = [
+  {longitude: -39.49, latitude: -15.42}, # location with index [0]
+  {longitude: -37.49, latitude: -12.42} # location with index [1]
+]
+mapped_locations = locations.map.with_index do |location, index|
+  [location[:longitude], location[:latitude], index]
+end
+kd_tree = Kdtree.new(mapped_locations)
+target_location = {longitude: -40.02, latitude: -15.10}
+number_of_nearest_locations = 1
+nearest_location_index = kd_tree.nearestk(
+  target_location[:longitude], target_location[:latitude], number_of_nearest_locations
+) # nearest_location_index => [0]
+```
+
 ### PgSearch
 
 [PgSearch](https://github.com/Casecommons/pg_search) - allows to search with PostgreSQL's full text search.
