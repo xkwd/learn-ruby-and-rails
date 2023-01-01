@@ -1709,6 +1709,15 @@ bundle _2.0.2_ install # run 'bundle install' with a specific version of Bundler
 EDITOR=atom bundle open <gem_name> # open a gem in a specified editor
 ```
 
+If you happen to have multiple default bundler versions installed via the `--default` command, the way to remove multiple defaults is to re-install specific versions again:
+
+```shell
+bundler (default: 2.4.1, default: 2.2.27, default: 2.1.4)
+gem install bundler -v 2.2.27
+gem install bundler -v 2.4.1
+bundler (2.4.1, 2.2.27, default: 2.1.4)
+```
+
 ### Savon
 ```ruby
 client = Savon.client(
