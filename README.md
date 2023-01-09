@@ -500,8 +500,15 @@ e - manually edit the current hunk
 
 #### Rebasing onto master
 
-It is a very typical situation, when you need some not yet merged feature and you start a new branch based on another branch, which is not merged yet. It also always comes with a side effect of a base branch being merged to master at some point in time. The following command allows to rebase such branch onto master and preserve commits only with your new feature, without any extra commits.
+It is a very typical situation, when you need some not yet merged feature and you start a new branch based on another branch with that feature, which is not merged yet. It also always comes with a side effect of a base branch being merged to master at some point of time. The following command allows to rebase such branch onto master and preserve commits only with your new feature, without any extra commits.
 `git rebase --onto master used_to_be_base_branch_which_is_merged_to_master current_branch_which_is_being_rebased_into_master`
+
+When you happen to have another branch, based on the branch which just was rebased onto master (in this case it is the current_branch_which_is_being_rebased_into_master), you would need a couple of extra steps:
+```shell
+git pull # update master branch first
+git rebase master # rebase your other branch (the 3rd or the 4th etc) to master
+git rebase current_branch_which_is_being_rebased_into_master # rebase your other branch (same as above) to current_branch_which_is_being_rebased_into_master
+```
 
 ### Continuous Integration
 
