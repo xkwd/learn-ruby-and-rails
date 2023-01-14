@@ -21,6 +21,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Decorator](#decorator)
   - [Facade](#facade)
 - [Development Tools](#development-tools)
+  - [Skipping brew update when running brew install](#skipping-brew-update-when-running-brew-install)
   - [Using Git and GitHub](#using-git-and-github)
     - [Aliases](#aliases)
     - [Safer push force](#safer-push-force)
@@ -399,6 +400,12 @@ Cons:
 - Generates plenty of new classes and corresponding specs
 
 ## Development Tools
+
+### Skipping brew update when running brew install
+
+```bash
+HOMEBREW_NO_AUTO_UPDATE=1 brew install ...
+```
 
 ### Using Git and GitHub
 
