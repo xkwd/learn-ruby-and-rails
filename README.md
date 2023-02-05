@@ -78,6 +78,8 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Kdtree](#kdtree)
   - [PgSearch](#pgsearch)
   - [dry-struct](#dry-struct)
+- [SQL](#sql)
+  - [Query example](#query-example)
 - [Debugging](#debugging)
   - [How to debug a Ruby gem](#how-to-debug-a-ruby-gem)
 - [Glossary](#glossary)
@@ -1854,6 +1856,175 @@ end
 
 Location.new(id: 2, name: 'default', indexes: [:a, :b])
 # => #<Location id=2 name="default" longitude=nil latitude=nil active_since=nil indexes=["a", "b"]>
+```
+
+## SQL
+
+### Query example
+
+```ruby
+class Report
+  Stats = Struct.new(
+    :created_by_id,
+    :created_by_name,
+    :created_by_role,
+    :source,
+    :appointments_total,
+    :appointments_average_value,
+    :appointments_total_showed,
+    :appointments_average_value_showed,
+    :appointments_total_not_showed,
+    :appointments_average_value_not_showed,
+    :appointments_total_canceled,
+    :appointments_average_value_canceled,
+    :appointments_total_showed_extras,
+    keyword_init: true,
+  )
+
+  def initialize(agency, from, to)
+    @agency = agency
+    @from = from.in_time_zone(agency.time_zone).beginning_of_day
+    @to = to.in_time_zone(agency.time_zone).end_of_day
+  end
+
+  def call
+    ActiveRecord::Base
+      .connection
+      .execute(params)
+      .map { |row| Stats.new(row) }
+  end
+
+  private
+
+  def params
+    ApplicationRecord.sanitize_sql(
+      [
+        query,
+        {
+          agency_id: @agency.id,
+          from: @from,
+          to: @to
+        }
+      ],
+    )
+  end
+
+  def query
+    <<~SQL.squish
+      WITH
+        all_agencies AS (
+          SELECT
+            a.id
+          FROM
+            agencies a
+          WHERE
+            a.id = :agency_id
+        ),
+        appointment_items_prefilter as (
+          SELECT
+            i.id,
+            i.item_id,
+            i.priceable_id,
+            i.priceable_type,
+            i.labor_price,
+            i.parts_price
+          FROM
+            items i
+              LEFT JOIN appointments a
+                ON a.id = i.priceable_id AND i.priceable_type = 'Appointment' AND a.agency_id = :agency_id
+          WHERE
+            a.appointment_datetime BETWEEN :from AND :to
+        ),
+        items_prefilter as (
+          SELECT
+            ai.id,
+            ai.priceable_id,
+            ai.priceable_type,
+            ai.labor_price,
+            ai.parts_price,
+            COALESCE(i.extras, '{}') AS extras
+          FROM
+            appointment_items_prefilter ai
+              LEFT JOIN items i
+                ON ai.item_id = i.id
+        ),
+        appointments_prefilter as (
+          SELECT
+            a.id
+              AS appointment_id,
+            SUM(COALESCE(ip.labor_price, 0.0) + COALESCE(ip.parts_price, 0.0))
+              AS price,
+            COUNT(ip.extras) FILTER ( WHERE ip.extras != '{}' AND a.aasm_state NOT IN ('canceled', 'not_shown'))
+              AS extras,
+            a.aasm_state,
+            a.created_by_id,
+            e.name
+              AS created_by_name,
+            e.role
+              AS created_by_role
+          FROM
+            appointments a
+              LEFT JOIN items_prefilter ip
+                ON a.id = ip.priceable_id AND ip.priceable_type = 'Appointment'
+              LEFT JOIN users
+                ON users.id = a.created_by_id
+              LEFT JOIN employments e
+                ON e.agency_id = a.agency_id AND e.email = users.email
+              INNER JOIN all_agencies aa
+                ON a.agency_id = aa.id
+          WHERE
+            a.appointment_datetime BETWEEN :from AND :to
+          GROUP BY
+            a.id, e.name, e.role
+        ),
+        aggregated_appointments AS (
+          SELECT
+            ap.created_by_id,
+            ap.created_by_name,
+            ap.created_by_role,
+            COUNT(*)
+              AS total,
+            COUNT(*) FILTER (WHERE ap.aasm_state NOT IN ('canceled', 'not_shown'))
+              AS total_showed,
+            COUNT(*) FILTER (WHERE ap.aasm_state = 'not_shown')
+              AS total_not_showed,
+            COUNT(*) FILTER (WHERE ap.aasm_state = 'canceled')
+              AS total_canceled,
+            SUM(ap.extras)::integer AS total_extras,
+            COALESCE(AVG(ap.price), 0.0)
+              AS average_value,
+            COALESCE(AVG(ap.price) FILTER (WHERE ap.aasm_state NOT IN ('canceled', 'not_shown')), 0.0)
+              AS average_value_showed,
+            COALESCE(AVG(ap.price) FILTER (WHERE ap.aasm_state = 'not_shown'), 0.0)
+              AS average_value_not_showed,
+            COALESCE(AVG(ap.price) FILTER (WHERE ap.aasm_state = 'canceled'), 0.0)
+              AS average_value_canceled
+          FROM
+            appointments_prefilter ap
+          GROUP BY
+            ap.created_by_id, ap.created_by_name, ap.created_by_role
+        )
+      SELECT
+        aa.created_by_id,
+        aa.created_by_name,
+        aa.created_by_role,
+        'scheduler' AS source,
+        COALESCE(aa.total, 0)                                 AS appointments_total,
+        ROUND(COALESCE(aa.average_value, 0.0), 2)             AS appointments_average_value,
+        COALESCE(aa.total_showed, 0)                          AS appointments_total_showed,
+        ROUND(COALESCE(aa.average_value_showed, 0.0), 2)      AS appointments_average_value_showed,
+        COALESCE(aa.total_not_showed, 0)                      AS appointments_total_not_showed,
+        ROUND(COALESCE(aa.average_value_not_showed, 0.0), 2)  AS appointments_average_value_not_showed,
+        COALESCE(aa.total_canceled, 0)                        AS appointments_total_canceled,
+        ROUND(COALESCE(aa.average_value_canceled, 0.0), 2)    AS appointments_average_value_canceled,
+        COALESCE(aa.total_extras, 0)                          AS appointments_total_showed_extras
+      FROM
+        aggregated_appointments aa
+      WHERE
+        aa.created_by_id IS NOT NULL and aa.created_by_role IS NOT NULL
+    SQL
+  end
+end
 ```
 
 ## Debugging
