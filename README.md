@@ -1700,6 +1700,57 @@ end
 decorator_stack.decorate(some_object)
 ```
 
+```ruby
+describe DecoratorStack do
+  subject(:stack) { described_class.new }
+
+  describe '#decorate' do
+    context 'with no decorators' do
+      it { expect(stack.decorate('object')).to eq('object') }
+    end
+
+    context 'with a single decorator' do
+      let(:decorator) do
+        Class.new do
+          def self.decorate(object)
+            "decorated-#{object}"
+          end
+        end
+      end
+
+      before { stack.add(decorator) }
+
+      it { expect(stack.decorate('object')).to eq 'decorated-object' }
+    end
+
+    context 'with multiple decorators' do
+      let(:first_decorator) do
+        Class.new do
+          def self.decorate(object)
+            "#{object}-decorated"
+          end
+        end
+      end
+
+      let(:second_decorator) do
+        Class.new do
+          def self.decorate(object)
+            "decorated-#{object}"
+          end
+        end
+      end
+
+      before do
+        stack.add(second_decorator)
+        stack.add(first_decorator)
+      end
+
+      it { expect(stack.decorate('object')).to eq 'decorated-object-decorated' }
+    end
+  end
+end
+```
+
 ### Splatting with destructuring assignment
 
 ```ruby
