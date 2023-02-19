@@ -70,6 +70,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
   - [Gem versioning](#gem-versioning)
   - [Decorator Stack](#decorator-stack)
+  - [Memory cache example](#memory-cache-example)
   - [Splatting with destructuring assignment](#splatting-with-destructuring-assignment)
 - [Ruby gems](#ruby-gems)
   - [Bundler](#bundler)
@@ -1750,6 +1751,136 @@ describe DecoratorStack do
   end
 end
 ```
+
+### Memory cache example
+
+```ruby
+class MemoryCache
+  EXPIRATION_IN_SECONDS = 60 * 60
+
+  attr_reader :store
+
+  def initialize(options = {})
+    @store = {}
+    @key_access = {}
+    @mutex = Mutex.new
+    @expires_in = options&.fetch(:expires_in, EXPIRATION_IN_SECONDS)
+  end
+
+  def read(key)
+    value = @store[key]
+    return unless value
+
+    if @key_access[key] > Time.now
+      value
+    else
+      delete(key)
+      nil
+    end
+  end
+
+  def write(key, entry, expires_in: nil)
+    @mutex.synchronize do
+      return entry if @store[key]
+
+      @key_access[key] = Time.now + (expires_in || @expires_in)
+      @store[key] = entry
+    end
+  end
+
+  def delete(key)
+    @mutex.synchronize do
+      @key_access.delete(key)
+      @store.delete(key)
+    end
+  end
+end
+```
+
+```ruby
+describe MemoryCache do
+  let(:write_cache) do
+    Timecop.freeze(Time.parse('2020-05-14 15:30')) do
+      cache.write(:key, :cached_entry, expires_in: 3600)
+    end
+  end
+  let(:cached_entry) { Timecop.freeze(cache_read_time) { cache.read(:key) } }
+  let(:cache_read_time) { Time.parse('2020-05-14 16:31') }
+
+  describe '#read' do
+    let(:cache) { described_class.new }
+
+    context 'when key is not cached' do
+      it { expect(cache.read(:key)).to be_nil }
+    end
+
+    context 'when key is cached' do
+      context 'when key is not expired' do
+        before { cache.write(:key, :cached_entry) }
+
+        it { expect(cache.read(:key)).to eq(:cached_entry) }
+      end
+
+      context 'when key is expired' do
+        before { write_cache }
+
+        it { expect(cached_entry).to be_nil }
+      end
+    end
+  end
+
+  describe '#write' do
+    let(:cache) { described_class.new(options) }
+
+    context 'when global expires_in is not defined' do
+      let(:options) { nil }
+
+      before { write_cache }
+
+      it { expect(cached_entry).to be_nil }
+    end
+
+    context 'when global expires_in is defined' do
+      context 'when write options are defined' do
+        let(:options) { {expires_in: 7200} }
+
+        before { write_cache }
+
+        context 'when cache is not expired' do
+          let(:cache_read_time) { Time.parse('2020-05-14 16:20') }
+
+          it { expect(cached_entry).to eq :cached_entry }
+        end
+
+        context 'when cache is expired' do
+          it { expect(cached_entry).to be_nil }
+        end
+      end
+
+      context 'when write options are not defined' do
+        let(:options) { {expires_in: 3600} }
+
+        before do
+          Timecop.freeze(Time.parse('2020-05-14 15:30')) do
+            cache.write(:key, :cached_entry)
+          end
+        end
+
+        context 'when cache is not expired' do
+          let(:cache_read_time) { Time.parse('2020-05-14 16:20') }
+
+          it { expect(cached_entry).to eq :cached_entry }
+        end
+
+        context 'when cache is expired' do
+          it { expect(cached_entry).to be_nil }
+        end
+      end
+    end
+  end
+end
+```
+
 
 ### Splatting with destructuring assignment
 
