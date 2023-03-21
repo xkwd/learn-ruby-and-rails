@@ -14,6 +14,8 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
 - [Ruby gems](#ruby-gems) - less popular but very useful Ruby gems
 - [Glossary](#glossary) - explanations for popular development words
 
+![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/gems.png)
+
 ## Table of contents
 
 - [Patterns](#patterns)
@@ -1898,6 +1900,8 @@ current # => 7
 
 
 ## Ruby gems
+
+![cover](https://raw.githubusercontent.com/xkwd/learning-ruby-rails/master/gems.png)
 
 ### Bundler
 ```shell
