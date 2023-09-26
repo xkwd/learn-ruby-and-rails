@@ -74,6 +74,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Decorator Stack](#decorator-stack)
   - [Memory cache example](#memory-cache-example)
   - [Splatting with destructuring assignment](#splatting-with-destructuring-assignment)
+  - [Save console output to a file](#save-console-output-to-a-file)
 - [Ruby gems](#ruby-gems)
   - [Bundler](#bundler)
   - [Savon](#savon)
@@ -1896,6 +1897,15 @@ new, *old, current = [1, 2, 3, 4, 5, 6, 7]
 new # => 1
 old # => [2, 3, 4, 5, 6]
 current # => 7
+```
+
+### Save console output to a file
+
+```ruby
+$stdout = File.new('file.rb', 'w')
+$stdout.sync = true
+$stdout = STDOUT
+puts ['to', 'save,', 'object', 'to', 'file']
 ```
 
 
