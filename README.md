@@ -70,6 +70,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
   - [One-liner hash creation with array as default value](#one-liner-hash-creation-with-array-as-default-value)
+  - [One-liner hash creation for counting occurrences of a certain value](#one-liner-hash-creation-for-counting-occurrences-of-a-certain-value)
   - [Gem versioning](#gem-versioning)
   - [Decorator Stack](#decorator-stack)
   - [Memory cache example](#memory-cache-example)
@@ -1659,6 +1660,11 @@ Hash.new { |hash, key| hash[key] = Hash.new(&hash.default_proc) }
 ### One-liner hash creation with array as default value
 ```ruby
 Hash.new { |hash, key| hash[key] = [] }
+```
+
+### One-liner hash creation for counting occurrences of a certain value
+```ruby
+articles.each_with_object(Hash.new(0)) { |article, memo| memo[article.type] += 1 }
 ```
 
 ### Gem versioning
