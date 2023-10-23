@@ -1611,6 +1611,17 @@ Interview.new { |interview| interview.title = 'Ruby' }
 # using #tap, which allows to omit the interview variable
 Interview.new.tap { |interview| interview.title = 'Ruby' }
 # => #<Interview:0x00007fe76a1007a8 @title="Ruby">
+
+# using #tap for conditional assignments
+[].tap do |list|
+  if something?
+    list << Builder.call(@article_params)
+  end
+
+  if nothing?
+    list << @default_article
+  end
+end
 ```
 
 ### Product of two arrays
