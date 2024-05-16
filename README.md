@@ -22,6 +22,8 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Service Object](#service-object)
   - [Decorator](#decorator)
   - [Facade](#facade)
+- [Data Structures](#data-structures)
+  - [Singly Linked List](#singly-linked-list)
 - [Development Tools](#development-tools)
   - [Skipping brew update when running brew install](#skipping-brew-update-when-running-brew-install)
   - [Using Git and GitHub](#using-git-and-github)
@@ -405,6 +407,36 @@ Cons:
 
 - Add an extra layer of abstraction, which in turn requires some time to adjust
 - Generates plenty of new classes and corresponding specs
+
+## Data Structures
+
+### Singly Linked List
+
+#### Detecting loop/cycle
+
+```ruby
+class ListNode
+  attr_accessor :val, :next
+
+  def initialize(val = 0, next = nil)
+    @val = val
+    @next = nil
+  end
+end
+
+def detect_cycle(head)
+  fast = slow = head
+
+  while fast && fast.next
+    slow = slow.next
+    fast = fast.next.next
+    return true if slow == fast
+  end
+
+  return false
+end
+```
+
 
 ## Development Tools
 
