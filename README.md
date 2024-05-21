@@ -412,18 +412,20 @@ Cons:
 
 ### Singly Linked List
 
-#### Detecting loop/cycle
-
 ```ruby
 class ListNode
   attr_accessor :val, :next
 
   def initialize(val = 0, next = nil)
     @val = val
-    @next = nil
+    @next = next
   end
 end
+```
 
+#### Detecting loop/cycle
+
+```ruby
 def detect_cycle(head)
   fast = slow = head
 
@@ -437,6 +439,25 @@ def detect_cycle(head)
 end
 ```
 
+#### Deleting middle node
+
+```ruby
+def delete_middle(head)
+  prev = nil
+  fast = slow = head
+
+  while fast && fast.next
+    fast = fast.next.next
+    prev = slow
+    slow = slow.next
+  end
+
+  return [] unless prev
+
+  prev.next = slow.next
+  head
+end
+```
 
 ## Development Tools
 
