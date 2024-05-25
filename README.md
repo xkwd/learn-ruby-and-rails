@@ -459,6 +459,22 @@ def delete_middle(head)
 end
 ```
 
+#### Reverse linked list
+
+```ruby
+def reverse_list(head)
+  curr = head
+  prev, nxt = nil
+  while curr
+    nxt = curr.next
+    curr.next = prev
+    prev = curr
+    curr = nxt
+  end
+  prev
+end
+```
+
 ## Development Tools
 
 ### Skipping brew update when running brew install
