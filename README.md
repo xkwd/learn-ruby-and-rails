@@ -439,6 +439,27 @@ def detect_cycle(head)
 end
 ```
 
+#### Return the node where the cycle begins
+
+```ruby
+def detect_cycle(head)
+  slow = fast = head
+
+  while fast && fast.next
+    slow = slow.next
+    fast = fast.next.next
+    if slow == fast
+      slow = head
+      while slow != fast
+        slow = slow.next
+        fast = fast.next
+      end
+      return slow
+    end
+  end
+end
+```
+
 #### Deleting middle node
 
 ```ruby
