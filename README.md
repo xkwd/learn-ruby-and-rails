@@ -68,6 +68,7 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Set object state with a block](#set-object-state-with-a-block)
   - [Product of two arrays](#product-of-two-arrays)
   - [Array generator](#array-generator)
+  - [XOR operator](#xor-operator)
   - [Timestamp generator](#timestamp-generator)
   - [Memoization](#memoization)
   - [One-liner nested hash creation](#one-liner-nested-hash-creation)
@@ -1725,6 +1726,13 @@ end
 
 ```ruby
   Array.new(5) { Random.rand(1..10) } # => [9, 4, 8, 6, 10]
+```
+
+### XOR operator
+`5 ^ 5 = 0` and `10 ^ 10 = 0`, so the XOR operator can be used for finding a single unique integer:
+
+```ruby
+[7, 5, 10, 5, 10].reduce(&:^) # => 7
 ```
 
 ### Timestamp generator
