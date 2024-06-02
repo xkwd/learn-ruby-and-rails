@@ -24,6 +24,8 @@ This repository was created with an idea to collect worthy tips about Ruby/Rails
   - [Facade](#facade)
 - [Data Structures](#data-structures)
   - [Singly Linked List](#singly-linked-list)
+- [Algorithms](#algorithms)
+  - [Mergesort](#mergesort)
 - [Development Tools](#development-tools)
   - [Skipping brew update when running brew install](#skipping-brew-update-when-running-brew-install)
   - [Using Git and GitHub](#using-git-and-github)
@@ -494,6 +496,36 @@ def reverse_list(head)
     curr = nxt
   end
   prev
+end
+```
+
+## Algorithms
+
+### Mergesort
+
+```ruby
+def sort(nums)
+    len = nums.size
+
+    return nums if len <= 1
+
+    mid = len / 2
+    left = sort(nums[0...mid])
+    right = sort(nums[mid...len])
+
+    merge(left, right)
+end
+
+def merge(left, right)
+    result = []
+    until left.size.zero? || right.size.zero?
+      if left.first <= right.first
+        result << left.shift
+      else
+        result << right.shift
+      end
+    end
+    result + left + right
 end
 ```
 
