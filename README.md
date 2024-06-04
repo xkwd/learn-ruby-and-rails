@@ -483,6 +483,29 @@ def delete_middle(head)
 end
 ```
 
+#### Deleting n-th node from end of linked list
+
+```ruby
+def remove_nth_from_end(head, n)
+  dummy = ListNode.new(0, head)
+  left = dummy
+  right = head
+
+  while n > 0 && right
+    right = right.next
+    n -= 1
+  end
+
+  while right
+    left = left.next
+    right = right.next
+  end
+
+  left.next = left.next.next
+  dummy.next
+end
+```
+
 #### Reverse linked list
 
 ```ruby
